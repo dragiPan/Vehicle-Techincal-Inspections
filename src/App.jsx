@@ -51,6 +51,19 @@ function App() {
     }
   }, [fade, pending]);
 
+  // Carousel effect for hero text
+  React.useEffect(() => {
+    if (!pending) {
+      const interval = setInterval(() => {
+        setFade(false);
+        setPending(
+          HERO_OPTIONS[(HERO_OPTIONS.findIndex((o) => o.key === selected) + 1) % HERO_OPTIONS.length].key
+        );
+      }, 4000); // 4 seconds per slide
+      return () => clearInterval(interval);
+    }
+  }, [selected, pending]);
+
   return (
     <div>
       {/* Header Section */}
@@ -58,14 +71,23 @@ function App() {
         <div className="ml-14">
           <img src={logo} alt="Tehnički pregled Oliver logo" className="w-[393px] h-[101px] block" />
         </div>
-        <div className="flex flex-col gap-2 mr-14 items-end">
-          <div className="flex flex-row gap-8">
-            <span className="text-[#222] text-[20px] font-raleway font-normal">dasdjnjasdaodsaosdkmdasd</span>
-            <span className="text-[#DC1B21] text-[20px] font-raleway font-normal">dasdjnjasdaodsaosdkmdasd</span>
+        <div className="flex flex-row gap-16 mr-14">
+          {/* Left Column */}
+          <div className="flex flex-col items-start gap-1 min-w-[220px]">
+            <div>
+              <span className="text-[#DC1B21] font-inter font-bold text-[20px]">Telefon:</span>
+              <span className="text-black font-inter font-normal text-[20px] ml-2">+381 36 586 2222</span>
+            </div>
+            <div>
+              <span className="text-[#DC1B21] font-inter font-bold text-[20px]">Mobilni:</span>
+              <span className="text-black font-inter font-normal text-[20px] ml-2">+381 63 839 9940</span>
+            </div>
           </div>
-          <div className="flex flex-row gap-8">
-            <span className="text-[#222] text-[20px] font-raleway font-normal">dasdjnjasdaodsaosdkmdasd</span>
-            <span className="text-[#DC1B21] text-[20px] font-raleway font-normal">dasdjnjasdaodsaosdkmdasd</span>
+          {/* Right Column */}
+          <div className="flex flex-col items-start gap-1 min-w-[180px]">
+            <div className="text-[#DC1B21] font-inter font-bold text-[20px]">Radno vreme</div>
+            <div className="text-black font-inter font-normal text-[20px]">Radnim danima: 07–17h</div>
+            <div className="text-black font-inter font-normal text-[20px]">Subotom: 07–14h</div>
           </div>
         </div>
       </div>
@@ -115,25 +137,28 @@ function App() {
           </div>
           <div className="flex flex-row gap-8 mt-4">
             {HERO_OPTIONS.map((option) => {
-              const isSelected = selected === option.key && !pending;
-              const isPending = pending === option.key;
               return (
-                <button
+                <a
                   key={option.key}
-                  onClick={() => handleSelect(option.key)}
-                  className={`font-inter font-semibold text-[24px] w-[256px] h-[64px] px-12 py-4 flex items-center justify-center rounded whitespace-nowrap truncate transition-all duration-500 ease-in-out
-                    ${isSelected || isPending
-                      ? "bg-[#DA0D14] text-white shadow-lg"
-                      : "bg-gradient-to-b from-[#DA0D14]/75 to-[#DA0D14]/50 text-white"}
-                    ${pending ? "opacity-60" : "opacity-100"}
-                  `}
-                  style={{
-                    transitionProperty: 'background-color, color, box-shadow, opacity',
+                  href="#" // blank link, no jump
+                  tabIndex={0}
+                  className={
+                    `font-inter font-semibold text-[20px] w-[300px] h-[64px] px-12 py-4 flex items-center justify-center whitespace-nowrap truncate
+                    bg-[#87171B] text-white border-none outline-none
+                    transition-colors duration-500`
+                  }
+                  style={{ borderRadius: 0, transitionProperty: 'background-color, color' }}
+                  onMouseDown={e => e.preventDefault()} // prevent focus ring
+                  onClick={e => e.preventDefault()} // no navigation yet
+                  onMouseEnter={e => {
+                    e.currentTarget.classList.add('hovered-hero-btn');
                   }}
-                  disabled={!!pending}
+                  onMouseLeave={e => {
+                    e.currentTarget.classList.remove('hovered-hero-btn');
+                  }}
                 >
                   {option.label}
-                </button>
+                </a>
               );
             })}
           </div>

@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+.hovered-hero-btn {
+  background: #DA0D14 !important;
+  transition: background-color 0.5s;
+}
