@@ -2,6 +2,12 @@ import logo from "./assets/finalni oliver logo i kartice-05 1.svg";
 import { useState } from "react";
 import heroVideo from "./assets/template_mechanic_video.mp4";
 import React from "react"; // Added missing import for React.useEffect
+import carLogo from "./assets/crvena-kola-logo.svg";
+import wheelLogo from "./assets/crven-volan-logo.svg";
+import keysLogo from "./assets/crveni-kljucevi.svg";
+import vectorBg from "./assets/Vector-background-image.png";
+import carImg from "./assets/car.png";
+import checkboxImg from "./assets/checkbox.svg";
 
 const HERO_OPTIONS = [
   {
@@ -163,6 +169,199 @@ function App() {
             })}
           </div>
         </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="usluge" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-5xl font-raleway font-bold text-[#1D1D1D] text-center mb-16">
+            NAŠE USLUGE
+          </h2>
+          <div className="relative flex justify-center items-stretch gap-8 max-w-screen-xl mx-auto" style={{minHeight: '1px'}}>
+            {/* Vertical Divider 1 */}
+            <div className="absolute top-0 left-1/3" style={{transform: 'translateX(-50%)', height: '70%'}}>
+              <div className="w-[3px] h-full bg-[#E4E4E7] rounded-full" />
+            </div>
+            {/* Vertical Divider 2 */}
+            <div className="absolute top-0 left-2/3" style={{transform: 'translateX(-50%)', height: '70%'}}>
+              <div className="w-[3px] h-full bg-[#E4E4E7] rounded-full" />
+            </div>
+            {/* Column 1 */}
+            <div className="flex flex-col items-center text-center w-1/3 px-4">
+              <img src={carLogo} alt="Tehnički pregled" className="h-20 mb-6" />
+              <h3 className="font-inter font-bold text-2xl text-[#1D1D1D] mb-4 h-16">
+                Tehnički pregled svih<br />vrsta motornih vozila
+              </h3>
+              <p className="font-inter text-base text-gray-600">
+                Sprovođenje kompletnog tehničkog pregleda u skladu sa zakonskim propisima – brzo, precizno i uz ljubazno osoblje. Vaša bezbednost je naš prioritet.
+              </p>
+            </div>
+            {/* Column 2 */}
+            <div className="flex flex-col items-center text-center w-1/3 px-4">
+              <img src={wheelLogo} alt="Kompletna registracija" className="h-20 mb-6" />
+              <h3 className="font-inter font-bold text-2xl text-[#1D1D1D] mb-4 h-16">
+                Kompletna registracija za<br />sva motorna vozila
+              </h3>
+              <p className="font-inter text-base text-gray-600">
+                Registrujte svoje vozilo bez odlaska u MUP! Na jednom mestu završavamo celokupnu proceduru – registracione nalepnice, prenos vlasništva, porez i potrebna dokumentacija.
+              </p>
+            </div>
+            {/* Column 3 */}
+            <div className="flex flex-col items-center text-center w-1/3 px-4">
+              <img src={keysLogo} alt="Osiguranje" className="h-20 mb-6" />
+              <h3 className="font-inter font-bold text-2xl text-[#1D1D1D] mb-4 h-16">
+                Zaključivanje polisa<br />osiguranja vozila i lica
+              </h3>
+              <p className="font-inter text-base text-gray-600">
+                Zaključujemo polise autoodgovornosti i dodatna osiguranja – brzo, pouzdano i po najpovoljnijim uslovima. Izdajemo zelene kartone i nudimo više opcija plaćanja.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Registration & Insurance Section */}
+      <section
+        className="w-full py-20 bg-cover bg-center flex justify-center items-center"
+        style={{
+          backgroundImage: `url(${vectorBg})`,
+          backgroundColor: '#232323',
+        }}
+      >
+        <div className="flex flex-row flex-wrap justify-center items-stretch gap-12 w-full max-w-6xl px-4">
+          {/* Box 1: Registracija vozila */}
+          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-10 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+            <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+              REGISTRACIJA VOZILA
+            </h3>
+            <ul className="text-white text-left w-full font-atkinson text-[14px] md:text-[16px] lg:text-[16px] leading-5 md:leading-6 space-y-2">
+              <li>• Kompletna registracija bez odlaska u MUP</li>
+              <li>• Izdavanje registracionih nalepnica</li>
+              <li>• Prevod vozila i prenos vlasništva (kupoprodajni ugovori, ovlašćenja)</li>
+              <li>• Plaćanje poreza</li>
+              <li>• Transport ili prevoženje neregistrovanih vozila na tehnički pregled</li>
+              <li>• Pomoć prilikom uvoza, carinjenja i prilikom prve registracije vozila</li>
+            </ul>
+          </div>
+          {/* Box 2: Osiguranje vozila */}
+          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-10 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+            <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+              OSIGURANJE VOZILA
+            </h3>
+            <ul className="text-white text-left w-full font-atkinson text-[14px] md:text-[16px] lg:text-[16px] leading-5 md:leading-6 space-y-2">
+              <li>• Izdavanje polise osiguranja od autoodgovornosti</li>
+              <li>• Dodatna osiguranja vozila (Osiguranja stakala, osiguranja putnika)</li>
+              <li>• Izdavanje zelenih kartona</li>
+              <li>• Plaćanje gotovinom, čekovima na 6 mesečnih rata bez kamate, karticama i administrativnim zabranama</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Technical Inspection Section */}
+      <section className="w-full bg-white py-20 overflow-x-hidden relative">
+        {/* Car image outside max-w-7xl, always flush with left edge of viewport, width 50vw */}
+        <div className="w-1/2 flex justify-start absolute left-0 bottom-0 z-0" style={{pointerEvents: 'none'}}>
+          <img
+            src={carImg}
+            alt="Crveni automobil"
+            className="animate-drive-in w-full h-auto object-contain"
+            style={{display: 'block'}}
+          />
+        </div>
+        {/* Centered content: left text and right boxes */}
+        <div className="max-w-7xl mx-auto flex flex-row justify-between items-start gap-12 relative z-10 w-full">
+          {/* Left Side */}
+          <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-10">
+            {/* Header and description at the top, with left padding */}
+            <div className="px-4">
+              <h2 className="text-[#232323] font-raleway font-bold text-[32px] md:text-[40px] lg:text-[48px] leading-tight text-left mb-6">
+                TEHNIČKI PREGLED VOZILA
+              </h2>
+              <p className="font-atkinson text-[18px] md:text-[20px] lg:text-[24px] leading-[28px] md:leading-[32px] text-left text-[#232323] mb-16">
+                Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
+              </p>
+            </div>
+          </div>
+          {/* Right Side */}
+          <div className="flex flex-col flex-1 max-w-[520px] gap-6 mt-2 z-20">
+            {/* Box 1 */}
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+              <span className="text-white font-raleway font-bold text-[32px] text-left">Putnička vozila</span>
+              <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 2 */}
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+              <span className="text-white font-raleway font-bold text-[32px] text-left">Autobusi</span>
+              <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 3 */}
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+              <span className="text-white font-raleway font-bold text-[32px] text-left">Mopedi</span>
+              <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 4 */}
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+              <span className="text-white font-raleway font-bold text-[32px] text-left">Motocikli</span>
+              <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 5 */}
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+              <span className="text-white font-raleway font-bold text-[32px] text-left">Kvadovi</span>
+              <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 6: Teretna vozila */}
+            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full" style={{borderRadius:0}}>
+              <div className="flex items-center justify-between">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Teretna vozila</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              </div>
+              <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
+                <li className="list-disc">Sve vrste teretnih vozila</li>
+                <li className="list-disc">Sve vrste priključnih vozila</li>
+              </ul>
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+            {/* Box 7: Radne mašine */}
+            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full" style={{borderRadius:0}}>
+              <div className="flex items-center justify-between">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Radne mašine</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+              </div>
+              <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
+                <li className="list-disc">Vangabaritna vozila</li>
+                <li className="list-disc">Traktori</li>
+              </ul>
+              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+            </div>
+          </div>
+        </div>
+        {/* Car animation keyframes */}
+        <style>{`
+          @keyframes drive-in {
+            0% { transform: translateX(-100%) scale(1.05); }
+            80% { transform: translateX(5%) scale(1.02); }
+            100% { transform: translateX(0) scale(1); }
+          }
+          .animate-drive-in {
+            animation: drive-in 1.4s cubic-bezier(0.7,0,0.3,1) 0.2s both;
+          }
+          @media (max-width: 1200px) {
+            .animate-drive-in {
+              max-width: 500px !important;
+            }
+          }
+          @media (max-width: 768px) {
+            .animate-drive-in {
+              max-width: 320px !important;
+            }
+          }
+        `}</style>
       </section>
     </div>
   );
