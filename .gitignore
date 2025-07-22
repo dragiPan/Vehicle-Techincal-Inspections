@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 
-src/assets/template_mechanic_video.mp4
+src/assets/*

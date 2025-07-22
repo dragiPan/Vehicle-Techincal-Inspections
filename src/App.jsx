@@ -1,6 +1,6 @@
 import logo from "./assets/finalni oliver logo i kartice-05 1.svg";
 import { useState } from "react";
-import heroVideo from "./assets/template_mechanic_video.mp4";
+import heroVideo from "./assets/oliver_snimak.mp4";
 import React from "react"; // Added missing import for React.useEffect
 import carLogo from "./assets/crvena-kola-logo.svg";
 import wheelLogo from "./assets/crven-volan-logo.svg";
@@ -8,6 +8,14 @@ import keysLogo from "./assets/crveni-kljucevi.svg";
 import vectorBg from "./assets/Vector-background-image.png";
 import carImg from "./assets/car.png";
 import checkboxImg from "./assets/checkbox.svg";
+import kamioniBg from "./assets/Kamioni.png";
+import slajd1 from './assets/slajd1.JPG';
+import slajd2 from './assets/slajd2.JPG';
+import slajd3 from './assets/slajd3.jpg';
+import slajd4 from './assets/slajd 4.jpg';
+import slajd5 from './assets/slajd 5.JPG';
+import arrowLeft from './assets/Arrow Left.svg';
+import arrowRight from './assets/Arrow Right.svg';
 
 const HERO_OPTIONS = [
   {
@@ -363,8 +371,160 @@ function App() {
           }
         `}</style>
       </section>
+
+      {/* Mission, Vision, Goals Section */}
+      <section
+        className="relative w-full min-h-[520px] flex items-center py-24 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${kamioniBg})`,
+        }}
+      >
+        {/* Overlay for readability */}
+        <div className="relative z-10 flex flex-row items-start w-full max-w-6xl mx-auto px-4">
+          {/* Left: Circles and line */}
+          <div className="flex flex-col items-center relative mr-12" style={{minWidth: '64px', height: '100%'}}>
+            {/* Vertical red line */}
+            <div className="absolute left-1/2 top-0 h-full flex flex-col items-center" style={{transform: 'translateX(-50%)', height: '100%'}}>
+              <div style={{height: '40px'}} />
+              <div className="w-[5px] bg-[#DA0D14]" style={{height: 'calc(100% - 64px)', opacity: 0.5, borderRadius: 0, minHeight: '340px'}} />
+            </div>
+            {/* Circle 1 */}
+            <div className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full mb-46 z-10" style={{borderRadius: '120px', opacity: 1}}>
+              <span className="text-white font-semibold text-2xl select-none font-atkinson">01</span>
+            </div>
+            {/* Circle 2 */}
+            <div className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full mb-46 z-10" style={{borderRadius: '120px', opacity: 1}}>
+              <span className="text-white font-semibold text-2xl select-none font-atkinson">02</span>
+            </div>
+            {/* Circle 3 */}
+            <div className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full z-10" style={{borderRadius: '120px', opacity: 1}}>
+              <span className="text-white font-semibold text-2xl select-none font-atkinson">03</span>
+            </div>
+          </div>
+          {/* Right: Texts */}
+          <div className="flex flex-col gap-16 max-w-xl pl-0">
+            {/* Row 1 */}
+            <div className="flex flex-col justify-start">
+              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Misija</h3>
+              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+                Misija naše kompanije je da na jednom mestu pruži kvalitetnu i brzu uslugu tehničkog pregleda i registracije svih motornih vozila na zadovoljstvo svih klijenata.
+              </p>
+            </div>
+            {/* Row 2 */}
+            <div className="flex flex-col justify-start">
+              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Vizija</h3>
+              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+                Vizija kompanije je da postavi visoke standarde u oblasti tehničkog pregleda i registracije vozila putem praćenja najnovijih trendova i uvođenja inovacija u ovoj oblasti.
+              </p>
+            </div>
+            {/* Row 3 */}
+            <div className="flex flex-col justify-start">
+              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Ciljevi</h3>
+              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+                Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Carousel Section */}
+      <section className="w-full bg-white py-20 flex flex-col items-center">
+        <div className="w-full max-w-5xl mx-auto px-4">
+          <h2 className="font-railway font-bold text-[48px] text-[#1D1D1D] text-left leading-none mb-6">O NAMA</h2>
+          <p className="font-atkinson text-[24px] text-left text-[#1D1D1D] mb-10 max-w-4xl">
+            Tehnički pregled OLIVER d.o.o. je privatno porodično preduzeće koje je počelo sa radom 2025. godine nakon dugogodišnjeg iskustva vlasnika i celog tima u poslovima tehničkog pregleda vozila.
+          </p>
+          {/* Carousel */}
+          <Carousel />
+        </div>
+      </section>
     </div>
   );
 }
 
 export default App;
+
+// Carousel component
+function Carousel() {
+  const images = [slajd1, slajd2, slajd3, slajd4, slajd5];
+  const [current, setCurrent] = React.useState(2); // Start with the middle image
+  const [animating, setAnimating] = React.useState(false);
+  const [direction, setDirection] = React.useState(0); // -1 for left, 1 for right
+
+  // Get the 5 images to display, centered on current
+  const getDisplayImages = () => {
+    const result = [];
+    for (let i = -2; i <= 2; i++) {
+      let idx = (current + i + images.length) % images.length;
+      result.push(images[idx]);
+    }
+    return result;
+  };
+
+  // For z-index and scale
+  const getZIndex = (i) => (i === 2 ? 30 : 20 - Math.abs(i - 2));
+  const getScale = (i) => {
+    if (i === 2) return 'scale-110';
+    if (i === 1 || i === 3) return 'scale-95';
+    return 'scale-90';
+  };
+  const getOpacity = (i) => {
+    if (i === 2) return 'opacity-100';
+    if (i === 1 || i === 3) return 'opacity-80';
+    return 'opacity-60';
+  };
+  const getGlow = (i) => {
+    if (i === 2) return '';
+    if (i === 1 || i === 3) return 'after:content-[""] after:absolute after:inset-0 after:bg-white after:opacity-10 after:rounded-xl';
+    return 'after:content-[""] after:absolute after:inset-0 after:bg-white after:opacity-25 after:rounded-xl';
+  };
+
+  // Animation handler
+  const handleArrow = (dir) => {
+    if (animating) return;
+    setDirection(dir);
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent((prev) => (prev + dir + images.length) % images.length);
+      setAnimating(false);
+    }, 350);
+  };
+
+  const displayImages = getDisplayImages();
+
+  return (
+    <div className="w-full flex flex-col items-center">
+      <div className="flex flex-row justify-center items-center gap-4 h-[420px] mb-6 select-none relative">
+        {displayImages.map((img, i) => (
+          <div
+            key={i}
+            className={`relative flex items-center justify-center transition-all duration-300 ease-in-out ${getScale(i)} ${getOpacity(i)}` +
+              ` ${animating ? 'pointer-events-none' : ''}`}
+            style={{ zIndex: getZIndex(i), minWidth: i === 2 ? 420 : i === 1 || i === 3 ? 320 : 220, minHeight: i === 2 ? 320 : i === 1 || i === 3 ? 240 : 180 }}
+          >
+            <img
+              src={img}
+              alt={`carousel-${i}`}
+              className={`object-cover rounded-xl shadow-lg transition-all duration-300 ease-in-out w-full h-full`}
+              draggable={false}
+            />
+            {/* White overlay for side images */}
+            {i !== 2 && (
+              <div className={`absolute inset-0 rounded-xl pointer-events-none transition-all duration-300 ${i === 1 || i === 3 ? 'bg-white/10' : 'bg-white/25'}`}></div>
+            )}
+          </div>
+        ))}
+      </div>
+      {/* Arrows */}
+      <div className="flex flex-row items-center justify-center gap-8 mt-2">
+        <button onClick={() => handleArrow(-1)} className="focus:outline-none" aria-label="Previous slide">
+          <img src={arrowLeft} alt="left arrow" className="w-10 h-10" />
+        </button>
+        <button onClick={() => handleArrow(1)} className="focus:outline-none" aria-label="Next slide">
+          <img src={arrowRight} alt="right arrow" className="w-10 h-10" />
+        </button>
+      </div>
+    </div>
+  );
+}
