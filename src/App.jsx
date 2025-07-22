@@ -448,11 +448,9 @@ export default App;
 // Carousel component
 function Carousel() {
   const images = [slajd1, slajd2, slajd3, slajd4, slajd5];
-  const [current, setCurrent] = React.useState(2); // Start with the middle image
+  const [current, setCurrent] = React.useState(2);
   const [animating, setAnimating] = React.useState(false);
-  const [direction, setDirection] = React.useState(0); // -1 for left, 1 for right
 
-  // Get the 5 images to display, centered on current
   const getDisplayImages = () => {
     const result = [];
     for (let i = -2; i <= 2; i++) {
@@ -462,10 +460,9 @@ function Carousel() {
     return result;
   };
 
-  // For z-index and scale
   const getZIndex = (i) => (i === 2 ? 30 : 20 - Math.abs(i - 2));
   const getScale = (i) => {
-    if (i === 2) return 'scale-110';
+    if (i === 2) return 'scale-105';
     if (i === 1 || i === 3) return 'scale-95';
     return 'scale-90';
   };
@@ -474,48 +471,49 @@ function Carousel() {
     if (i === 1 || i === 3) return 'opacity-80';
     return 'opacity-60';
   };
-  const getGlow = (i) => {
-    if (i === 2) return '';
-    if (i === 1 || i === 3) return 'after:content-[""] after:absolute after:inset-0 after:bg-white after:opacity-10 after:rounded-xl';
-    return 'after:content-[""] after:absolute after:inset-0 after:bg-white after:opacity-25 after:rounded-xl';
+  const getMargin = (i) => {
+    if (i === 1 || i === 3) return '-ml-16'; // Slight overlap
+    if (i === 0 || i === 4) return '-ml-8'; // Further side slides
+    return ''; // Center slide, no margin
   };
 
-  // Animation handler
   const handleArrow = (dir) => {
     if (animating) return;
-    setDirection(dir);
     setAnimating(true);
     setTimeout(() => {
       setCurrent((prev) => (prev + dir + images.length) % images.length);
       setAnimating(false);
-    }, 350);
+    }, 300);
   };
 
   const displayImages = getDisplayImages();
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="flex flex-row justify-center items-center gap-4 h-[420px] mb-6 select-none relative">
+      <div className="flex justify-center items-center h-[380px] mb-6 select-none relative">
         {displayImages.map((img, i) => (
           <div
             key={i}
-            className={`relative flex items-center justify-center transition-all duration-300 ease-in-out ${getScale(i)} ${getOpacity(i)}` +
-              ` ${animating ? 'pointer-events-none' : ''}`}
-            style={{ zIndex: getZIndex(i), minWidth: i === 2 ? 420 : i === 1 || i === 3 ? 320 : 220, minHeight: i === 2 ? 320 : i === 1 || i === 3 ? 240 : 180 }}
+            className={`relative transition-all duration-300 ease-in-out ${getScale(i)} ${getOpacity(i)} ${getMargin(i)} ${animating ? 'pointer-events-none' : ''}`}
+            style={{
+              zIndex: getZIndex(i),
+              minWidth: i === 2 ? 460 : i === 1 || i === 3 ? 300 : 220,
+              minHeight: i === 2 ? 300 : i === 1 || i === 3 ? 220 : 160,
+            }}
           >
             <img
               src={img}
               alt={`carousel-${i}`}
-              className={`object-cover rounded-xl shadow-lg transition-all duration-300 ease-in-out w-full h-full`}
+              className="object-cover shadow-md w-full h-full"
               draggable={false}
             />
-            {/* White overlay for side images */}
             {i !== 2 && (
-              <div className={`absolute inset-0 rounded-xl pointer-events-none transition-all duration-300 ${i === 1 || i === 3 ? 'bg-white/10' : 'bg-white/25'}`}></div>
+              <div className={`absolute inset-0 ${i === 1 || i === 3 ? 'bg-white/10' : 'bg-white/25'} pointer-events-none`} />
             )}
           </div>
         ))}
       </div>
+
       {/* Arrows */}
       <div className="flex flex-row items-center justify-center gap-8 mt-2">
         <button onClick={() => handleArrow(-1)} className="focus:outline-none" aria-label="Previous slide">
