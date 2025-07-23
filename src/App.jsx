@@ -16,6 +16,38 @@ import slajd4 from './assets/slajd 4.jpg';
 import slajd5 from './assets/slajd 5.JPG';
 import arrowLeft from './assets/Arrow Left.svg';
 import arrowRight from './assets/Arrow Right.svg';
+// Additional carousel images (excluding team member images)
+import carousel1 from './assets/DSC_6409.JPG';
+import carousel2 from './assets/DSC_6633.JPG';
+import carousel3 from './assets/DSC_6149.JPG';
+import carousel4 from './assets/DSC_6366.JPG';
+import carousel5 from './assets/DSC_6306.JPG';
+import carousel6 from './assets/DSC_6145.JPG';
+import carousel7 from './assets/DSC_6302.JPG';
+import carousel8 from './assets/DSC_6362.JPG';
+import carousel9 from './assets/DSC_6312.JPG';
+import carousel10 from './assets/DSC_6322.JPG';
+import carousel11 from './assets/DSC_6661.JPG';
+import carousel12 from './assets/DSC_6091.JPG';
+import carousel13 from './assets/DSC_6160.JPG';
+import carousel14 from './assets/DSC_6163.JPG';
+import carousel15 from './assets/DSC_6169.JPG';
+import carousel16 from './assets/DSC_6197.JPG';
+import carousel17 from './assets/DSC_6203.JPG';
+import carousel18 from './assets/DSC_6200.JPG';
+import carousel19 from './assets/DSC_6401.JPG';
+import carousel20 from './assets/DSC_6453.JPG';
+import carousel21 from './assets/DSC_6725.JPG';
+import carousel22 from './assets/DSC_6348.JPG';
+// Team member images
+import oliver_direktor from './assets/DSC_6755 (1).JPG';
+import veljko_menadzer from './assets/DSC_6773 (1).JPG';
+import natasa_agent from './assets/DSC_6267.JPG';
+import bozica_pravnik from './assets/DSC_6274.JPG';
+import sanja_kontrolor from './assets/DSC_6334.JPG';
+import mirko_kontrolor from './assets/DSC_6244.JPG';
+import srdjan_kontrolor from './assets/DSC_6288.JPG';
+import dejan_kontrolor from './assets/DSC_6232.JPG';
 
 const HERO_OPTIONS = [
   {
@@ -438,6 +470,231 @@ function App() {
           {/* Carousel */}
           <Carousel />
         </div>
+        {/* Carousel animation keyframes */}
+        <style>{`
+          @keyframes carousel-slide-in {
+            0% {
+              transform: translateX(100%) scale(0.5);
+              opacity: 0;
+            }
+            20% {
+              transform: translateX(50%) scale(0.7);
+              opacity: 0.4;
+            }
+            50% {
+              transform: translateX(0) scale(1);
+              opacity: 1;
+            }
+            80% {
+              transform: translateX(-50%) scale(0.7);
+              opacity: 0.4;
+            }
+            100% {
+              transform: translateX(-100%) scale(0.5);
+              opacity: 0;
+            }
+          }
+          
+          @keyframes carousel-slide-out {
+            0% {
+              transform: translateX(-100%) scale(0.5);
+              opacity: 0;
+            }
+            20% {
+              transform: translateX(-50%) scale(0.7);
+              opacity: 0.4;
+            }
+            50% {
+              transform: translateX(0) scale(1);
+              opacity: 1;
+            }
+            80% {
+              transform: translateX(50%) scale(0.7);
+              opacity: 0.4;
+            }
+            100% {
+              transform: translateX(100%) scale(0.5);
+              opacity: 0;
+            }
+          }
+          
+          .carousel-item-enter {
+            animation: carousel-slide-in 0.7s ease-in-out;
+          }
+          
+          .carousel-item-exit {
+            animation: carousel-slide-out 0.7s ease-in-out;
+          }
+        `}</style>
+      </section>
+
+      {/* Our Team Section */}
+      <section id="nastim" className="w-full bg-[#1D1D1D] py-20">
+        <div className="w-full max-w-7xl mx-auto px-4">
+          <div className="mb-16">
+            <h2 className="font-raleway font-bold text-[48px] text-white text-left leading-none mb-6">
+              NAŠ TIM
+            </h2>
+            <p className="font-atkinson text-[24px] text-white text-left leading-relaxed max-w-4xl">
+              Naš tim čine profesionalno i ljubazno osoblje sa dugogodišnjim iskustvom u obavljanju tehničkog pregleda, registracije i osiguranja svih vrsta motornih vozila.
+            </p>
+          </div>
+          
+          {/* Team Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Director */}
+            <div className="flex flex-col">
+              <img 
+                src={oliver_direktor} 
+                alt="Oliver Rađenović - Direktor" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Oliver Rađenović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Direktor
+                </p>
+              </div>
+            </div>
+
+            {/* Manager */}
+            <div className="flex flex-col">
+              <img 
+                src={veljko_menadzer} 
+                alt="Veljko Rađenović - Menadžer" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Veljko Rađenović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Menadžer
+                </p>
+              </div>
+            </div>
+
+            {/* Sales Agent */}
+            <div className="flex flex-col">
+              <img 
+                src={natasa_agent} 
+                alt="Nataša Mladenović - Agent prodaje u osiguranju" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Nataša Mladenović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Agent prodaje u osiguranju
+                </p>
+              </div>
+            </div>
+
+            {/* Lawyer */}
+            <div className="flex flex-col">
+              <img 
+                src={bozica_pravnik} 
+                alt="Božica Radovanović - Diplomirani pravnik" 
+                className="w-full h-[350px] object-cover"
+                style={{ 
+                  width: '280px', 
+                  height: '350px',
+                  objectPosition: 'center 20%' // More top cropping for better face framing
+                }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Božica Radovanović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Diplomirani pravnik
+                </p>
+              </div>
+            </div>
+
+            {/* Technical Inspector 1 */}
+            <div className="flex flex-col">
+              <img 
+                src={sanja_kontrolor} 
+                alt="Sanja Šekler - Kontrolor tehničkog pregleda" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Sanja Šekler
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Kontrolor tehničkog pregleda
+                </p>
+              </div>
+            </div>
+
+            {/* Technical Inspector 2 */}
+            <div className="flex flex-col">
+              <img 
+                src={mirko_kontrolor} 
+                alt="Mirko Vukadinović - Kontrolor tehničkog pregleda" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Mirko Vukadinović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Kontrolor tehničkog pregleda
+                </p>
+              </div>
+            </div>
+
+            {/* Technical Inspector 3 */}
+            <div className="flex flex-col">
+              <img 
+                src={srdjan_kontrolor} 
+                alt="Srđan Nikolić - Kontrolor tehničkog pregleda" 
+                className="w-full h-[350px] object-cover"
+                style={{ width: '280px', height: '350px' }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Srđan Nikolić
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Kontrolor tehničkog pregleda
+                </p>
+              </div>
+            </div>
+
+            {/* Technical Inspector 4 */}
+            <div className="flex flex-col">
+              <img 
+                src={dejan_kontrolor} 
+                alt="Dejan Obradović - Kontrolor tehničkog pregleda" 
+                className="w-full h-[350px] object-cover"
+                style={{ 
+                  width: '280px', 
+                  height: '350px',
+                  objectPosition: 'center 20%' // More top cropping for better face framing
+                }}
+              />
+              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                  Dejan Obradović
+                </h3>
+                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                  Kontrolor tehničkog pregleda
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -447,79 +704,182 @@ export default App;
 
 // Carousel component
 function Carousel() {
-  const images = [slajd1, slajd2, slajd3, slajd4, slajd5];
-  const [current, setCurrent] = React.useState(2);
-  const [animating, setAnimating] = React.useState(false);
+  const allImages = [
+    slajd1, slajd2, slajd3, slajd4, slajd5,
+    carousel1, carousel2, carousel3, carousel4, carousel5,
+    carousel6, carousel7, carousel8, carousel9, carousel10,
+    carousel11, carousel12, carousel13, carousel14, carousel15,
+    carousel16, carousel17, carousel18, carousel19, carousel20,
+    carousel21, carousel22
+  ];
+  const [current, setCurrent] = React.useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = React.useState(true);
+  const [loadedImages, setLoadedImages] = React.useState(new Set());
 
-  const getDisplayImages = () => {
-    const result = [];
+  // Lazy loading: only load images that are needed for display
+  const getVisibleImageIndices = () => {
+    const indices = [];
+    // Center and adjacent images (positions 0, 1, -1, 2, -2)
     for (let i = -2; i <= 2; i++) {
-      let idx = (current + i + images.length) % images.length;
-      result.push(images[idx]);
+      const index = (current + i + allImages.length) % allImages.length;
+      indices.push(index);
     }
-    return result;
+    return indices;
   };
 
-  const getZIndex = (i) => (i === 2 ? 30 : 20 - Math.abs(i - 2));
-  const getScale = (i) => {
-    if (i === 2) return 'scale-105';
-    if (i === 1 || i === 3) return 'scale-95';
-    return 'scale-90';
-  };
-  const getOpacity = (i) => {
-    if (i === 2) return 'opacity-100';
-    if (i === 1 || i === 3) return 'opacity-80';
-    return 'opacity-60';
-  };
-  const getMargin = (i) => {
-    if (i === 1 || i === 3) return '-ml-16'; // Slight overlap
-    if (i === 0 || i === 4) return '-ml-8'; // Further side slides
-    return ''; // Center slide, no margin
-  };
+  // Load images that are needed for display
+  React.useEffect(() => {
+    const visibleIndices = getVisibleImageIndices();
+    const newLoadedImages = new Set(loadedImages);
+    
+    visibleIndices.forEach(index => {
+      if (!loadedImages.has(index)) {
+        newLoadedImages.add(index);
+      }
+    });
+    
+    setLoadedImages(newLoadedImages);
+  }, [current, loadedImages]);
 
+  // Auto-play functionality
+  React.useEffect(() => {
+    if (!isAutoPlaying) return;
+    
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % allImages.length);
+    }, 4000); // 4 seconds per slide
+    
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, allImages.length]);
+
+  // Pause auto-play on hover
+  const handleMouseEnter = () => setIsAutoPlaying(false);
+  const handleMouseLeave = () => setIsAutoPlaying(true);
+
+  // Manual navigation
   const handleArrow = (dir) => {
-    if (animating) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrent((prev) => (prev + dir + images.length) % images.length);
-      setAnimating(false);
-    }, 300);
+    setCurrent((prev) => (prev + dir + allImages.length) % allImages.length);
   };
-
-  const displayImages = getDisplayImages();
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex justify-center items-center h-[380px] mb-6 select-none relative">
-        {displayImages.map((img, i) => (
-          <div
-            key={i}
-            className={`relative transition-all duration-300 ease-in-out ${getScale(i)} ${getOpacity(i)} ${getMargin(i)} ${animating ? 'pointer-events-none' : ''}`}
-            style={{
-              zIndex: getZIndex(i),
-              minWidth: i === 2 ? 460 : i === 1 || i === 3 ? 300 : 220,
-              minHeight: i === 2 ? 300 : i === 1 || i === 3 ? 220 : 160,
-            }}
-          >
-            <img
-              src={img}
-              alt={`carousel-${i}`}
-              className="object-cover shadow-md w-full h-full"
-              draggable={false}
-            />
-            {i !== 2 && (
-              <div className={`absolute inset-0 ${i === 1 || i === 3 ? 'bg-white/10' : 'bg-white/25'} pointer-events-none`} />
-            )}
-          </div>
-        ))}
+    <div 
+      className="w-full flex flex-col items-center"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="relative w-full h-[420px] overflow-hidden">
+        <div className="flex justify-center items-center h-full">
+          {allImages.map((img, index) => {
+            // Calculate position relative to current
+            const position = (index - current + allImages.length) % allImages.length;
+            
+            // Only render if image is loaded or needed for display
+            const isVisible = Math.abs(position) <= 2;
+            const isLoaded = loadedImages.has(index);
+            
+            if (!isLoaded && !isVisible) {
+              return null; // Don't render unloaded images that aren't needed
+            }
+            
+            // Calculate transform and opacity based on position
+            let transform = '';
+            let opacity = 0;
+            let scale = 0.5;
+            let zIndex = 0;
+            let width = '460px';
+            let height = '300px';
+            
+            if (position === 0) {
+              // Center item (current) - bigger
+              transform = 'translateX(0)';
+              opacity = 1; // Full opacity for center
+              scale = 1.2; // Bigger scale
+              zIndex = 30;
+              width = '580px';
+              height = '380px';
+            } else if (position === 1 || position === allImages.length - 1) {
+              // Adjacent items
+              const direction = position === 1 ? 1 : -1;
+              transform = `translateX(${direction * 250}px)`;
+              opacity = 0.8; // Higher opacity
+              scale = 0.95;
+              zIndex = 20;
+              width = '460px';
+              height = '300px';
+            } else if (position === 2 || position === allImages.length - 2) {
+              // Further items
+              const direction = position === 2 ? 1 : -1;
+              transform = `translateX(${direction * 400}px)`;
+              opacity = 0.9; // Even higher opacity
+              scale = 0.9;
+              zIndex = 10;
+              width = '400px';
+              height = '260px';
+            } else {
+              // Hidden items
+              const direction = position > allImages.length / 2 ? 1 : -1;
+              transform = `translateX(${direction * 550}px)`;
+              opacity = 1; // Full opacity for furthest items
+              scale = 0.8;
+              zIndex = 0;
+              width = '360px';
+              height = '240px';
+            }
+
+            return (
+              <div
+                key={index}
+                className="absolute transition-all duration-1000 ease-out"
+                style={{
+                  transform,
+                  opacity: isLoaded ? opacity : 0, // Hide unloaded images
+                  scale,
+                  zIndex,
+                }}
+              >
+                <div 
+                  className="relative"
+                  style={{
+                    filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))',
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt={`carousel-${index}`}
+                    className="object-cover shadow-lg"
+                    style={{
+                      width,
+                      height,
+                      borderRadius: '0', // Sharp corners
+                    }}
+                    draggable={false}
+                    onLoad={() => {
+                      if (!loadedImages.has(index)) {
+                        setLoadedImages(prev => new Set([...prev, index]));
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Arrows */}
-      <div className="flex flex-row items-center justify-center gap-8 mt-2">
-        <button onClick={() => handleArrow(-1)} className="focus:outline-none" aria-label="Previous slide">
+      <div className="flex flex-row items-center justify-center gap-8 mt-8">
+        <button 
+          onClick={() => handleArrow(-1)} 
+          className="focus:outline-none hover:scale-110 transition-transform duration-200" 
+          aria-label="Previous slide"
+        >
           <img src={arrowLeft} alt="left arrow" className="w-10 h-10" />
         </button>
-        <button onClick={() => handleArrow(1)} className="focus:outline-none" aria-label="Next slide">
+        <button 
+          onClick={() => handleArrow(1)} 
+          className="focus:outline-none hover:scale-110 transition-transform duration-200" 
+          aria-label="Next slide"
+        >
           <img src={arrowRight} alt="right arrow" className="w-10 h-10" />
         </button>
       </div>
