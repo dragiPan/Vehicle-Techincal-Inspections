@@ -76,6 +76,9 @@ function App() {
   const [selected, setSelected] = useState("tehnicki");
   const [fade, setFade] = useState(true); // true = visible, false = hidden
   const [pending, setPending] = useState(null); // key of next option
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [activeSection, setActiveSection] = useState("pocetna");
+  const [isNavSticky, setIsNavSticky] = useState(false);
 
   const current = HERO_OPTIONS.find((o) => o.key === selected);
 
@@ -103,6 +106,84 @@ function App() {
       return () => clearInterval(interval);
     }
   }, [selected, pending]);
+
+  // Scroll handling and navigation
+  React.useEffect(() => {
+    const handleScroll = () => {
+      // Show/hide scroll to top button
+      setShowScrollTop(window.scrollY > 300);
+
+      // Handle sticky navbar
+      const headerHeight = document.querySelector('.header-section')?.offsetHeight || 0;
+      setIsNavSticky(window.scrollY > headerHeight);
+
+      // Determine active section
+      const sections = [
+        { id: 'pocetna', element: document.getElementById('pocetna') },
+        { id: 'usluge', element: document.getElementById('usluge') },
+        { id: 'onama', element: document.getElementById('onama') },
+        { id: 'nastim', element: document.getElementById('nastim') },
+        { id: 'mapa', element: document.getElementById('mapa') },
+        { id: 'kontakt', element: document.getElementById('kontakt') }
+      ];
+
+      const scrollPosition = window.scrollY + 100; // Offset for better detection
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Normal section detection
+      let foundSection = false;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section.element) {
+          const sectionTop = section.element.offsetTop;
+          const sectionHeight = section.element.offsetHeight;
+          const sectionBottom = sectionTop + sectionHeight;
+          
+          // For map and kontakt sections, highlight 'kontakt' nav button
+          if (section.id === 'mapa' || section.id === 'kontakt') {
+            if (scrollPosition >= sectionTop) {
+              setActiveSection('kontakt'); // Always set to 'kontakt' for navigation highlighting
+              foundSection = true;
+              break;
+            }
+          } else {
+            // For other sections, use normal detection
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+              setActiveSection(section.id);
+              foundSection = true;
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Smooth scroll function
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = isNavSticky ? 70 : 0; // Account for sticky navbar height
+      const elementPosition = element.offsetTop - offset;
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   // Car animation trigger
   React.useEffect(() => {
@@ -136,7 +217,7 @@ function App() {
   return (
     <div className="overflow-x-hidden">
       {/* Header Section */}
-      <div className="flex flex-col lg:flex-row items-center justify-between w-full bg-white py-8 px-8 lg:px-16 xl:px-24 gap-4 lg:gap-0">
+      <div className="header-section flex flex-col lg:flex-row items-center justify-between w-full bg-white py-8 px-8 lg:px-16 xl:px-24 gap-4 lg:gap-0">
         <div className="flex-shrink-0">
           <img src={logo} alt="Tehnički pregled Oliver logo" className="w-[280px] md:w-[320px] lg:w-[393px] h-auto" />
         </div>
@@ -161,27 +242,62 @@ function App() {
         </div>
       </div>
       {/* Navigation Section */}
-      <nav className="w-screen bg-[#1D1D1D]">
+      <nav className={`w-screen bg-[#1D1D1D] transition-all duration-300 ${isNavSticky ? 'fixed top-0 z-50 shadow-lg' : 'relative'}`}>
         <ul className="flex flex-wrap justify-between items-center w-full py-3" style={{ width: '70%', margin: '0 auto' }}>
           <li>
-            <a href="#pocetna" className="text-[#E9E9E9] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Početna</a>
+            <button 
+              onClick={() => scrollToSection('pocetna')}
+              className={`font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded transition-colors duration-300 ${
+                activeSection === 'pocetna' ? 'text-[#E9E9E9]' : 'text-[#AFAFAF] hover:text-[#E9E9E9]'
+              }`}
+            >
+              Početna
+            </button>
           </li>
           <li>
-            <a href="#usluge" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Usluge</a>
+            <button 
+              onClick={() => scrollToSection('usluge')}
+              className={`font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded transition-colors duration-300 ${
+                activeSection === 'usluge' ? 'text-[#E9E9E9]' : 'text-[#AFAFAF] hover:text-[#E9E9E9]'
+              }`}
+            >
+              Usluge
+            </button>
           </li>
           <li>
-            <a href="#onama" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">O nama</a>
+            <button 
+              onClick={() => scrollToSection('onama')}
+              className={`font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded transition-colors duration-300 ${
+                activeSection === 'onama' ? 'text-[#E9E9E9]' : 'text-[#AFAFAF] hover:text-[#E9E9E9]'
+              }`}
+            >
+              O nama
+            </button>
           </li>
           <li>
-            <a href="#nastim" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Naš tim</a>
+            <button 
+              onClick={() => scrollToSection('nastim')}
+              className={`font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded transition-colors duration-300 ${
+                activeSection === 'nastim' ? 'text-[#E9E9E9]' : 'text-[#AFAFAF] hover:text-[#E9E9E9]'
+              }`}
+            >
+              Naš tim
+            </button>
           </li>
           <li>
-            <a href="#kontakt" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Kontakt</a>
+            <button 
+              onClick={() => scrollToSection('kontakt')}
+              className={`font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded transition-colors duration-300 ${
+                activeSection === 'kontakt' ? 'text-[#E9E9E9]' : 'text-[#AFAFAF] hover:text-[#E9E9E9]'
+              }`}
+            >
+              Kontakt
+            </button>
           </li>
         </ul>
       </nav>
       {/* Hero Section */}
-      <section className="relative w-full h-[600px] flex items-end justify-center bg-black overflow-hidden">
+      <section id="pocetna" className="relative w-full h-[600px] flex items-end justify-center bg-black overflow-hidden">
         <video
           className="absolute top-0 left-0 w-full h-full object-cover z-0"
           src={heroVideo}
@@ -206,28 +322,28 @@ function App() {
           </div>
           <div className="flex flex-row gap-8 mt-4">
             {HERO_OPTIONS.map((option) => {
+              const getScrollTarget = (key) => {
+                switch(key) {
+                  case 'tehnicki': return 'tehnicki-pregled';
+                  case 'osiguranje': return 'registracija-osiguranje';
+                  case 'registracija': return 'registracija-osiguranje';
+                  default: return 'usluge';
+                }
+              };
+
               return (
-                <a
+                <button
                   key={option.key}
-                  href="#" // blank link, no jump
-                  tabIndex={0}
+                  onClick={() => scrollToSection(getScrollTarget(option.key))}
                   className={
                     `font-inter font-semibold text-[20px] w-[300px] h-[64px] px-12 py-4 flex items-center justify-center whitespace-nowrap truncate
-                    bg-[#87171B] text-white border-none outline-none
+                    bg-[#87171B] hover:bg-[#DA0D14] text-white border-none outline-none
                     transition-colors duration-500`
                   }
-                  style={{ borderRadius: 0, transitionProperty: 'background-color, color' }}
-                  onMouseDown={e => e.preventDefault()} // prevent focus ring
-                  onClick={e => e.preventDefault()} // no navigation yet
-                  onMouseEnter={e => {
-                    e.currentTarget.classList.add('hovered-hero-btn');
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.classList.remove('hovered-hero-btn');
-                  }}
+                  style={{ borderRadius: 0 }}
                 >
                   {option.label}
-                </a>
+                </button>
               );
             })}
           </div>
@@ -285,6 +401,7 @@ function App() {
 
       {/* Registration & Insurance Section */}
       <section
+        id="registracija-osiguranje"
         className="w-full py-20 bg-cover bg-center flex justify-center items-center"
         style={{
           backgroundImage: `url(${vectorBg})`,
@@ -322,7 +439,7 @@ function App() {
       </section>
 
       {/* Technical Inspection Section */}
-      <section className="w-full bg-white py-20 overflow-x-hidden relative">
+      <section id="tehnicki-pregled" className="w-full bg-white py-20 overflow-x-hidden relative">
         {/* Car image - positioned to drive in from left */}
         <div className="absolute left-0 bottom-[10%] z-0" style={{pointerEvents: 'none', overflow: 'visible'}}>
           <img
@@ -498,7 +615,7 @@ function App() {
       </section>
 
       {/* Carousel Section */}
-      <section className="w-full bg-white py-20 flex flex-col items-center">
+      <section id="onama" className="w-full bg-white py-20 flex flex-col items-center">
         <div className="w-full max-w-5xl mx-auto px-4">
           <h2 className="font-railway font-bold text-[48px] text-[#1D1D1D] text-left leading-none mb-6">O NAMA</h2>
           <p className="font-atkinson text-[24px] text-left text-[#1D1D1D] mb-10 max-w-4xl">
@@ -684,9 +801,9 @@ function App() {
       </section>
 
       {/* Map Section */}
-      <section className="w-full h-[400px]">
+      <section id="mapa" className="w-full h-[400px]">
         <iframe
-          src="https://maps.google.com/maps?q=Vojvode+Mišića+2,+Ratina+-+Kraljevo,+Serbia&t=&z=15&ie=UTF8&iwloc=&output=embed"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d5768.260815836614!2d20.7503319!3d43.7078389!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x475701fed749a339%3A0x32e579c8c47fc265!2sTehni%C4%8Dki%20pregled%20OLIVER%20DOO!5e0!3m2!1ssr!2srs!4v1753714518010!5m2!1ssr!2srs"
           width="100%"
           height="100%"
           style={{ border: 0 }}
@@ -698,7 +815,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full bg-[#1D1D1D] py-20">
+      <footer id="kontakt" className="w-full bg-[#1D1D1D] py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Main Footer Content */}
           <div className="flex flex-col lg:flex-row justify-between items-start gap-20 mb-16">
@@ -715,7 +832,7 @@ function App() {
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                   </svg>
                   <a 
-                    href="https://maps.app.goo.gl/A7zh4wQxx3qzcKpB9" 
+                    href="https://maps.app.goo.gl/snLwr7t9HNeffiVY7" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="font-inter font-normal text-[24px] leading-[24px] text-gray-400 hover:text-white transition-colors whitespace-nowrap"
@@ -808,6 +925,29 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 w-12 h-12 bg-[#DA0D14] text-white rounded-full shadow-lg hover:bg-[#87171B] transition-all duration-300 z-50 flex items-center justify-center group"
+          aria-label="Scroll to top"
+        >
+          <svg 
+            className="w-6 h-6 transform transition-transform duration-300 group-hover:-translate-y-1" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={3} 
+              d="M5 10l7-7m0 0l7 7m-7-7v18" 
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
