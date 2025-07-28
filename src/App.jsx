@@ -78,14 +78,6 @@ function App() {
   const [pending, setPending] = useState(null); // key of next option
 
   const current = HERO_OPTIONS.find((o) => o.key === selected);
-  const pendingOption = pending ? HERO_OPTIONS.find((o) => o.key === pending) : null;
-
-  // Animation handler
-  const handleSelect = (key) => {
-    if (key === selected || pending) return;
-    setFade(false); // start fade out
-    setPending(key);
-  };
 
   // When fade is false (fading out), after transition, swap text and fade in
   React.useEffect(() => {
@@ -112,16 +104,45 @@ function App() {
     }
   }, [selected, pending]);
 
+  // Car animation trigger
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const carElement = document.getElementById('car-animation');
+          if (carElement) {
+            carElement.classList.add('drive-in');
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    // Find the section containing the car animation
+    const carElement = document.getElementById('car-animation');
+    if (carElement) {
+      const sectionElement = carElement.closest('section');
+      if (sectionElement) {
+        observer.observe(sectionElement);
+      }
+    }
+
+    // Cleanup
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div>
+    <div className="overflow-x-hidden">
       {/* Header Section */}
-      <div className="flex items-center justify-between w-full bg-white py-8 px-8 lg:px-16 xl:px-24">
+      <div className="flex flex-col lg:flex-row items-center justify-between w-full bg-white py-8 px-8 lg:px-16 xl:px-24 gap-4 lg:gap-0">
         <div className="flex-shrink-0">
           <img src={logo} alt="Tehnički pregled Oliver logo" className="w-[280px] md:w-[320px] lg:w-[393px] h-auto" />
         </div>
-        <div className="flex flex-row gap-8 lg:gap-12 xl:gap-16">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 lg:gap-12 xl:gap-16">
           {/* Left Column */}
-          <div className="flex flex-col items-start gap-1 min-w-[180px] lg:min-w-[220px]">
+          <div className="flex flex-col items-start gap-1 min-w-0 lg:min-w-[220px]">
             <div>
               <span className="text-[#DC1B21] font-inter font-bold text-[16px] lg:text-[20px]">Telefon:</span>
               <span className="text-black font-inter font-normal text-[16px] lg:text-[20px] ml-2">+381 36 586 2222</span>
@@ -132,7 +153,7 @@ function App() {
             </div>
           </div>
           {/* Right Column */}
-          <div className="flex flex-col items-start gap-1 min-w-[140px] lg:min-w-[180px]">
+          <div className="flex flex-col items-start gap-1 min-w-0 lg:min-w-[180px]">
             <div className="text-[#DC1B21] font-inter font-bold text-[16px] lg:text-[20px]">Radno vreme</div>
             <div className="text-black font-inter font-normal text-[16px] lg:text-[20px]">Radnim danima: 07–17h</div>
             <div className="text-black font-inter font-normal text-[16px] lg:text-[20px]">Subotom: 07–14h</div>
@@ -141,21 +162,21 @@ function App() {
       </div>
       {/* Navigation Section */}
       <nav className="w-screen bg-[#1D1D1D]">
-        <ul className="flex justify-between items-center w-full max-w-screen-xl mx-auto px-24 py-3">
+        <ul className="flex flex-wrap justify-between items-center w-full py-3" style={{ width: '70%', margin: '0 auto' }}>
           <li>
-            <a href="#pocetna" className="text-[#E9E9E9] font-raleway font-semibold text-[24px] px-4 py-1 rounded">Početna</a>
+            <a href="#pocetna" className="text-[#E9E9E9] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Početna</a>
           </li>
           <li>
-            <a href="#usluge" className="text-[#AFAFAF] font-raleway font-semibold text-[24px] px-4 py-1 rounded">Usluge</a>
+            <a href="#usluge" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Usluge</a>
           </li>
           <li>
-            <a href="#onama" className="text-[#AFAFAF] font-raleway font-semibold text-[24px] px-4 py-1 rounded">O nama</a>
+            <a href="#onama" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">O nama</a>
           </li>
           <li>
-            <a href="#nastim" className="text-[#AFAFAF] font-raleway font-semibold text-[24px] px-4 py-1 rounded">Naš tim</a>
+            <a href="#nastim" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Naš tim</a>
           </li>
           <li>
-            <a href="#kontakt" className="text-[#AFAFAF] font-raleway font-semibold text-[24px] px-4 py-1 rounded">Kontakt</a>
+            <a href="#kontakt" className="text-[#AFAFAF] font-raleway font-semibold text-[18px] lg:text-[24px] px-2 lg:px-4 py-1 rounded">Kontakt</a>
           </li>
         </ul>
       </nav>
@@ -302,19 +323,18 @@ function App() {
 
       {/* Technical Inspection Section */}
       <section className="w-full bg-white py-20 overflow-x-hidden relative">
-        {/* Car image - larger and positioned to drive halfway into the section */}
-        <div className="w-3/4 flex justify-start absolute left-0 bottom-0 z-0" style={{pointerEvents: 'none'}}>
+        {/* Car image - positioned to drive in from left */}
+        <div className="absolute left-0 bottom-[10%] z-0" style={{pointerEvents: 'none', overflow: 'visible'}}>
           <img
             src={carImg}
             alt="Crveni automobil"
-            className="w-full h-auto object-contain"
-            style={{
-              display: 'block',
-              maxHeight: '80vh',
-              transform: 'translateX(-50%)',
-              animation: 'none' // Remove automatic animation
-            }}
             id="car-animation"
+            style={{
+              height: 'auto',
+              maxHeight: 'none',
+              opacity: 1,
+              transition: 'transform 2s ease-out'
+            }}
           />
         </div>
         {/* Centered content: left text and right boxes */}
@@ -389,49 +409,36 @@ function App() {
             </div>
           </div>
         </div>
-        {/* Car animation keyframes and intersection observer */}
+        {/* Drive-in animation keyframes */}
         <style>{`
-          @keyframes drive-in {
-            0% { transform: translateX(-100%) scale(1.05); }
-            80% { transform: translateX(5%) scale(1.02); }
-            100% { transform: translateX(0) scale(1); }
+          @keyframes carDriveIn {
+            0%   { transform: translateX(-100%); }
+            70%  { transform: translateX(-45%);  }
+            100% { transform: translateX(-40%);  }
           }
-          .animate-drive-in {
-            animation: drive-in 1.4s cubic-bezier(0.7,0,0.3,1) 0.2s both;
+
+          #car-animation {
+            width: 180% !important;
+            transform: translateX(-100%);
           }
-          @media (max-width: 1200px) {
-            .animate-drive-in {
-              max-width: 500px !important;
-            }
+          
+          #car-animation.drive-in {
+            animation: carDriveIn 1.8s ease-out forwards;
           }
-          @media (max-width: 768px) {
-            .animate-drive-in {
-              max-width: 320px !important;
-            }
+
+          /* Responsive tweaks */
+          @media (max-width:1200px){
+            #car-animation{ width:160% !important; }
+          }
+          @media (max-width:768px){
+            #car-animation{ width:140% !important; }
+          }
+          @media (max-width:480px){
+            #car-animation{ width:120% !important; }
           }
         `}</style>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            document.addEventListener('DOMContentLoaded', function() {
-              const car = document.getElementById('car-animation');
-              let hasAnimated = false;
-              
-              const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                  if (entry.isIntersecting && !hasAnimated) {
-                    car.classList.add('animate-drive-in');
-                    hasAnimated = true;
-                    observer.unobserve(entry.target);
-                  }
-                });
-              }, { threshold: 0.3 });
-              
-              if (car) {
-                observer.observe(car);
-              }
-            });
-          `
-        }} />
+
+
       </section>
 
       {/* Mission, Vision, Goals Section */}
@@ -500,62 +507,7 @@ function App() {
           {/* Carousel */}
           <Carousel />
         </div>
-        {/* Carousel animation keyframes */}
-        <style>{`
-          @keyframes carousel-slide-in {
-            0% {
-              transform: translateX(100%) scale(0.5);
-              opacity: 0;
-            }
-            20% {
-              transform: translateX(50%) scale(0.7);
-              opacity: 0.4;
-            }
-            50% {
-              transform: translateX(0) scale(1);
-              opacity: 1;
-            }
-            80% {
-              transform: translateX(-50%) scale(0.7);
-              opacity: 0.4;
-            }
-            100% {
-              transform: translateX(-100%) scale(0.5);
-              opacity: 0;
-            }
-          }
-          
-          @keyframes carousel-slide-out {
-            0% {
-              transform: translateX(-100%) scale(0.5);
-              opacity: 0;
-            }
-            20% {
-              transform: translateX(-50%) scale(0.7);
-              opacity: 0.4;
-            }
-            50% {
-              transform: translateX(0) scale(1);
-              opacity: 1;
-            }
-            80% {
-              transform: translateX(50%) scale(0.7);
-              opacity: 0.4;
-            }
-            100% {
-              transform: translateX(100%) scale(0.5);
-              opacity: 0;
-            }
-          }
-          
-          .carousel-item-enter {
-            animation: carousel-slide-in 0.7s ease-in-out;
-          }
-          
-          .carousel-item-exit {
-            animation: carousel-slide-out 0.7s ease-in-out;
-          }
-        `}</style>
+
       </section>
 
       {/* Our Team Section */}
@@ -617,7 +569,7 @@ function App() {
                 style={{ 
                   width: '280px', 
                   height: '350px',
-                  objectPosition: 'center 15%' // More top cropping for better face framing
+                  objectPosition: 'center 10%' // More top-heavy cropping for better face framing
                 }}
               />
               <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
@@ -639,7 +591,7 @@ function App() {
                 style={{ 
                   width: '280px', 
                   height: '350px',
-                  objectPosition: 'center 15%' // More top cropping for better face framing
+                  objectPosition: 'center 40%' // More bottom-heavy cropping for better face framing
                 }}
               />
               <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
@@ -715,7 +667,7 @@ function App() {
                 style={{ 
                   width: '280px', 
                   height: '350px',
-                  objectPosition: 'center 10%' // More top cropping for better face framing
+                  objectPosition: 'center 5%' // More top-heavy cropping for better face framing
                 }}
               />
               <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
@@ -821,7 +773,7 @@ function App() {
 
             {/* Center Column - Working Hours */}
             <div className="flex-1 min-w-0 lg:min-w-[300px]">
-              <h3 className="font-inter font-medium text-[24px] text-white text-left leading-none my-12">
+              <h3 className="font-inter font-medium text-[24px] text-white text-left leading-none mt-24 mb-8">
                 Radno vreme
               </h3>
               
@@ -864,45 +816,17 @@ export default App;
 
 // Carousel component
 function Carousel() {
-  // Randomized image order (fixed order, not changing each time)
+  // All available images for carousel (excluding logos, icons, backgrounds, and team photos)
   const allImages = [
-    carousel12, carousel7, slajd3, carousel19, carousel4,
-    carousel15, slajd1, carousel21, carousel8, carousel2,
-    carousel16, slajd5, carousel10, carousel13, carousel6,
-    carousel22, slajd2, carousel1, carousel17, carousel9,
-    carousel11, slajd4, carousel20, carousel3, carousel14,
-    carousel18, carousel5
+    // Carousel images - manually randomized order
+    carousel15, carousel8, carousel3, carousel19, carousel12, carousel6, carousel21, carousel1, carousel17, carousel10,
+    carousel4, carousel22, carousel13, carousel7, carousel20, carousel2, carousel16, carousel9, carousel14, carousel11,
+    carousel18, carousel5, slajd3, slajd1, slajd5, slajd2, slajd4
   ];
   
   const [current, setCurrent] = React.useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = React.useState(true);
-  const [loadedImages, setLoadedImages] = React.useState(new Set());
   const [isTransitioning, setIsTransitioning] = React.useState(false);
-
-  // Lazy loading: only load images that are needed for display
-  const getVisibleImageIndices = () => {
-    const indices = [];
-    // Center and adjacent images (positions 0, 1, -1, 2, -2)
-    for (let i = -2; i <= 2; i++) {
-      const index = (current + i + allImages.length) % allImages.length;
-      indices.push(index);
-    }
-    return indices;
-  };
-
-  // Load images that are needed for display
-  React.useEffect(() => {
-    const visibleIndices = getVisibleImageIndices();
-    const newLoadedImages = new Set(loadedImages);
-    
-    visibleIndices.forEach(index => {
-      if (!loadedImages.has(index)) {
-        newLoadedImages.add(index);
-      }
-    });
-    
-    setLoadedImages(newLoadedImages);
-  }, [current, loadedImages]);
 
   // Auto-play functionality
   React.useEffect(() => {
@@ -929,7 +853,7 @@ function Carousel() {
     // Re-enable after transition completes
     setTimeout(() => {
       setIsTransitioning(false);
-    }, 800); // Reduced from 1000ms to 800ms for smoother feel
+    }, 400); // Match the CSS transition duration
   };
 
   const handleArrow = (dir) => {
@@ -942,99 +866,82 @@ function Carousel() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative w-full h-[420px] overflow-hidden">
-        <div className="flex justify-center items-center h-full">
+      {/* Carousel Container */}
+      <div className="relative w-full max-w-[1400px] h-[400px] flex justify-center items-center">
+        {/* Cards Container */}
+        <div className="relative w-full h-full">
           {allImages.map((img, index) => {
-            // Calculate position relative to current
-            const position = (index - current + allImages.length) % allImages.length;
+            // Calculate relative position with proper circular logic
+            let position = index - current;
             
-            // Only render if image is loaded or needed for display
-            const isVisible = Math.abs(position) <= 2;
-            const isLoaded = loadedImages.has(index);
-            
-            if (!isLoaded && !isVisible) {
-              return null; // Don't render unloaded images that aren't needed
+            // Handle circular array wraparound
+            if (position > allImages.length / 2) {
+              position -= allImages.length;
+            } else if (position < -allImages.length / 2) {
+              position += allImages.length;
             }
             
-            // Calculate transform and opacity based on position
+            // Only render visible images (center + 2 on each side)
+            if (Math.abs(position) > 2) return null;
+            
+            // Calculate transform, scale, and opacity based on position
             let transform = '';
-            let opacity = 0;
-            let scale = 0.5;
-            let zIndex = 0;
-            let width = '460px';
-            let height = '300px';
+            let scale = 1;
+            let opacity = 1;
+            let zIndex = 1;
             
             if (position === 0) {
-              // Center item (current) - bigger
+              // Center item (current) - full size and opacity
               transform = 'translateX(0)';
-              opacity = 1; // Full opacity for center
-              scale = 1.2; // Bigger scale
-              zIndex = 30;
-              width = '580px';
-              height = '380px';
-            } else if (position === 1 || position === allImages.length - 1) {
-              // Adjacent items
-              const direction = position === 1 ? 1 : -1;
-              transform = `translateX(${direction * 250}px)`;
-              opacity = 0.8; // Higher opacity
-              scale = 0.95;
-              zIndex = 20;
-              width = '460px';
-              height = '300px';
-            } else if (position === 2 || position === allImages.length - 2) {
-              // Further items
-              const direction = position === 2 ? 1 : -1;
-              transform = `translateX(${direction * 400}px)`;
-              opacity = 0.9; // Even higher opacity
-              scale = 0.9;
-              zIndex = 10;
-              width = '400px';
-              height = '260px';
-            } else {
-              // Hidden items
-              const direction = position > allImages.length / 2 ? 1 : -1;
-              transform = `translateX(${direction * 550}px)`;
-              opacity = 1; // Full opacity for furthest items
+              scale = 1;
+              opacity = 1;
+              zIndex = 3;
+            } else if (position === 1) {
+              // Right item (next)
+              transform = 'translateX(40%)';
               scale = 0.8;
+              opacity = 0.4;
+              zIndex = 1;
+            } else if (position === -1) {
+              // Left item (previous)
+              transform = 'translateX(-40%)';
+              scale = 0.8;
+              opacity = 0.4;
+              zIndex = 1;
+            } else if (position === 2) {
+              // Far right item (next next)
+              transform = 'translateX(60%)';
+              scale = 0.6;
+              opacity = 0.2;
               zIndex = 0;
-              width = '360px';
-              height = '240px';
+            } else if (position === -2) {
+              // Far left item (previous previous)
+              transform = 'translateX(-60%)';
+              scale = 0.6;
+              opacity = 0.2;
+              zIndex = 0;
             }
 
             return (
               <div
                 key={index}
-                className="absolute transition-all duration-800 ease-out"
+                className="absolute w-[70%] h-full left-0 right-0 mx-auto transition-all duration-400 ease-in-out"
                 style={{
-                  transform,
-                  opacity: isLoaded ? opacity : 0, // Hide unloaded images
-                  scale,
+                  transform: `${transform} scale(${scale})`,
+                  opacity,
                   zIndex,
                 }}
               >
-                <div 
-                  className="relative"
+                <img
+                  src={img}
+                  alt={`carousel-${index}`}
+                  className="w-full h-full object-cover shadow-lg"
                   style={{
-                    filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.3))',
+                    borderRadius: '0', // Sharp corners as requested
+                    boxShadow: position === 0 ? '0px 0px 5px 0px rgba(81, 81, 81, 0.47)' : 'none'
                   }}
-                >
-                  <img
-                    src={img}
-                    alt={`carousel-${index}`}
-                    className="object-cover shadow-lg"
-                    style={{
-                      width,
-                      height,
-                      borderRadius: '0', // Sharp corners
-                    }}
-                    draggable={false}
-                    onLoad={() => {
-                      if (!loadedImages.has(index)) {
-                        setLoadedImages(prev => new Set([...prev, index]));
-                      }
-                    }}
-                  />
-                </div>
+                  draggable={false}
+                />
               </div>
             );
           })}
