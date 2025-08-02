@@ -5,37 +5,29 @@ import React from "react"; // Added missing import for React.useEffect
 import carLogo from "./assets/crvena-kola-logo.svg";
 import wheelLogo from "./assets/crven-volan-logo.svg";
 import keysLogo from "./assets/crveni-kljucevi.svg";
-import vectorBg from "./assets/Vector-background-image.png";
 import carImg from "./assets/car.png";
 import checkboxImg from "./assets/checkbox.svg";
 import kamioniBg from "./assets/Kamioni.png";
+import fullContentBg from "./assets/Full content pozadina.jpg";
+import teamBg from "./assets/pozadina tima.jpg";
 import slajd1 from './assets/slajd1.JPG';
-import slajd2 from './assets/slajd2.JPG';
 import slajd3 from './assets/slajd3.jpg';
 import slajd4 from './assets/slajd 4.jpg';
 import slajd5 from './assets/slajd 5.JPG';
 import arrowLeft from './assets/Arrow Left.svg';
 import arrowRight from './assets/Arrow Right.svg';
 // Additional carousel images (excluding team member images)
-import carousel1 from './assets/DSC_6409.JPG';
-import carousel2 from './assets/DSC_6633.JPG';
 import carousel3 from './assets/DSC_6149.JPG';
-import carousel4 from './assets/DSC_6366.JPG';
 import carousel5 from './assets/DSC_6306.JPG';
 import carousel6 from './assets/DSC_6145.JPG';
 import carousel7 from './assets/DSC_6302.JPG';
-import carousel8 from './assets/DSC_6362.JPG';
 import carousel9 from './assets/DSC_6312.JPG';
 import carousel10 from './assets/DSC_6322.JPG';
-import carousel11 from './assets/DSC_6661.JPG';
 import carousel12 from './assets/DSC_6091.JPG';
 import carousel13 from './assets/DSC_6160.JPG';
-import carousel14 from './assets/DSC_6163.JPG';
 import carousel15 from './assets/DSC_6169.JPG';
 import carousel16 from './assets/DSC_6197.JPG';
-import carousel17 from './assets/DSC_6203.JPG';
 import carousel18 from './assets/DSC_6200.JPG';
-import carousel19 from './assets/DSC_6401.JPG';
 import carousel20 from './assets/DSC_6453.JPG';
 import carousel21 from './assets/DSC_6725.JPG';
 import carousel22 from './assets/DSC_6348.JPG';
@@ -55,57 +47,26 @@ const HERO_OPTIONS = [
   {
     key: "tehnicki",
     label: "TEHNIČKI PREGLED",
-    title: "Produžite registraciju vašeg vozila bez odlaska u MUP!",
-    desc: "Brzo, jednostavno i sigurno obavite tehnički pregled i registraciju vašeg vozila na jednom mestu. Uštedite vreme i izbegnite gužve!",
   },
   {
     key: "osiguranje",
     label: "OSIGURANJE",
-    title: "Najpovoljnije osiguranje za vaše vozilo",
-    desc: "Izaberite najbolju polisu osiguranja i zaštitite svoje vozilo i sebe od nepredviđenih situacija na putu.",
   },
   {
     key: "registracija",
     label: "REGISTRACIJA VOZILA",
-    title: "Registrujte vozilo bez stresa i čekanja",
-    desc: "Kompletna usluga registracije vozila uz stručnu pomoć našeg tima. Sve na jednom mestu, brzo i efikasno!",
   },
 ];
 
+const HERO_CONTENT = {
+  title: "Pozovite nas na 036-586-2222 i zakažite svoj termin unapred!",
+  desc: "Pružamo kompletan tehnički pregled za sve vrste motornih vozila. Od motocikala i putničkih vozila, preko lakih i teških teretnjaka, autobusa, prikulica i poluprikulica, pa sve do traktora i radnih mašina. Bez obzira na vrstu vozila, kod nas ste u sigurnim rukama."
+};
+
 function App() {
-  const [selected, setSelected] = useState("tehnicki");
-  const [fade, setFade] = useState(true); // true = visible, false = hidden
-  const [pending, setPending] = useState(null); // key of next option
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [activeSection, setActiveSection] = useState("pocetna");
   const [isNavSticky, setIsNavSticky] = useState(false);
-
-  const current = HERO_OPTIONS.find((o) => o.key === selected);
-
-  // When fade is false (fading out), after transition, swap text and fade in
-  React.useEffect(() => {
-    if (!fade && pending) {
-      const timeout = setTimeout(() => {
-        setSelected(pending);
-        setFade(true); // fade in new text
-        setPending(null);
-      }, 400); // match transition duration
-      return () => clearTimeout(timeout);
-    }
-  }, [fade, pending]);
-
-  // Carousel effect for hero text
-  React.useEffect(() => {
-    if (!pending) {
-      const interval = setInterval(() => {
-        setFade(false);
-        setPending(
-          HERO_OPTIONS[(HERO_OPTIONS.findIndex((o) => o.key === selected) + 1) % HERO_OPTIONS.length].key
-        );
-      }, 4000); // 4 seconds per slide
-      return () => clearInterval(interval);
-    }
-  }, [selected, pending]);
 
   // Scroll handling and navigation
   React.useEffect(() => {
@@ -128,11 +89,8 @@ function App() {
       ];
 
       const scrollPosition = window.scrollY + 100; // Offset for better detection
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
 
       // Normal section detection
-      let foundSection = false;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section.element) {
@@ -144,14 +102,12 @@ function App() {
           if (section.id === 'mapa' || section.id === 'kontakt') {
             if (scrollPosition >= sectionTop) {
               setActiveSection('kontakt'); // Always set to 'kontakt' for navigation highlighting
-              foundSection = true;
               break;
             }
           } else {
             // For other sections, use normal detection
             if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
               setActiveSection(section.id);
-              foundSection = true;
               break;
             }
           }
@@ -165,9 +121,19 @@ function App() {
 
   // Smooth scroll function
   const scrollToSection = (sectionId) => {
+    // Special case for "pocetna" - scroll to very top
+    if (sectionId === 'pocetna') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      return;
+    }
+
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = isNavSticky ? 70 : 0; // Account for sticky navbar height
+      // Always account for navbar height since it will become sticky during scroll
+      const offset = 70; // Fixed navbar height offset
       const elementPosition = element.offsetTop - offset;
       
       window.scrollTo({
@@ -217,7 +183,7 @@ function App() {
   return (
     <div className="overflow-x-hidden">
       {/* Header Section */}
-      <div className="header-section flex flex-col lg:flex-row items-center justify-between w-full bg-white py-8 px-8 lg:px-16 xl:px-24 gap-4 lg:gap-0">
+      <div className="header-section flex flex-col lg:flex-row items-center justify-between w-full bg-white py-3 px-8 lg:px-16 xl:px-60 gap-4 lg:gap-0">
         <div className="flex-shrink-0">
           <img src={logo} alt="Tehnički pregled Oliver logo" className="w-[280px] md:w-[320px] lg:w-[393px] h-auto" />
         </div>
@@ -243,7 +209,7 @@ function App() {
       </div>
       {/* Navigation Section */}
       <nav className={`w-screen bg-[#1D1D1D] transition-all duration-300 ${isNavSticky ? 'fixed top-0 z-50 shadow-lg' : 'relative'}`}>
-        <ul className="flex flex-wrap justify-between items-center w-full py-3" style={{ width: '70%', margin: '0 auto' }}>
+        <ul className="flex flex-wrap justify-between items-center w-full py-3" style={{ width: '60%', margin: '0 auto' }}>
           <li>
             <button 
               onClick={() => scrollToSection('pocetna')}
@@ -307,20 +273,18 @@ function App() {
           playsInline
         />
         {/* Bottom shadow overlay */}
-        <div className="pointer-events-none absolute bottom-0 left-0 w-full h-1/2 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <div className="relative z-20 w-full max-w-4xl mx-auto flex flex-col items-start pb-10 px-8 mb-4">
-          {/* Animated text (single container) */}
-          <div
-            className={`transition-opacity duration-400 ease-in-out ${fade ? "opacity-100" : "opacity-0"} w-full`}
-          >
+        <div className="pointer-events-none absolute bottom-0 left-0 w-full h-3/4 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+        <div className="relative z-20 w-full max-w-6xl mx-auto flex flex-col items-center pb-10 px-8 mb-4">
+          {/* Static text content */}
+          <div className="w-full text-left pl-16 pr-55">
             <h1 className="font-inter font-semibold text-[32px] text-white mb-4">
-              {current.title}
+              {HERO_CONTENT.title}
             </h1>
             <p className="font-inter text-[20px] text-white mb-10">
-              {current.desc}
+              {HERO_CONTENT.desc}
             </p>
           </div>
-          <div className="flex flex-row gap-8 mt-4">
+          <div className="flex flex-row gap-8 mt-4 justify-center items-center">
             {HERO_OPTIONS.map((option) => {
               const getScrollTarget = (key) => {
                 switch(key) {
@@ -337,10 +301,9 @@ function App() {
                   onClick={() => scrollToSection(getScrollTarget(option.key))}
                   className={
                     `font-inter font-semibold text-[20px] w-[300px] h-[64px] px-12 py-4 flex items-center justify-center whitespace-nowrap truncate
-                    bg-[#87171B] hover:bg-[#DA0D14] text-white border-none outline-none
+                    bg-[#87171B] hover:bg-[#DA0D14] text-white border-none outline-none rounded-none
                     transition-colors duration-500`
                   }
-                  style={{ borderRadius: 0 }}
                 >
                   {option.label}
                 </button>
@@ -399,49 +362,57 @@ function App() {
         </div>
       </section>
 
-      {/* Registration & Insurance Section */}
-      <section
-        id="registracija-osiguranje"
-        className="w-full py-20 bg-cover bg-center flex justify-center items-center"
+      {/* Continuous Background Container for Registration/Insurance and Technical Inspection */}
+      <div 
+        className="w-full bg-cover bg-top bg-no-repeat"
         style={{
-          backgroundImage: `url(${vectorBg})`,
-          backgroundColor: '#232323',
+          backgroundImage: `url(${fullContentBg})`,
+          backgroundPosition: 'center -165px',
+          backgroundColor: '#ffffff',
         }}
       >
-        <div className="flex flex-row flex-wrap justify-center items-stretch gap-12 w-full max-w-6xl px-4">
+        {/* Registration & Insurance Section */}
+        <section
+          id="registracija-osiguranje"
+          className="w-full py-20 flex justify-center items-center"
+        >
+                  <div className="flex flex-row flex-wrap justify-center items-stretch gap-12 w-full max-w-7xl px-4">
           {/* Box 1: Registracija vozila */}
-          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-10 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
-            <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+                                      <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
               REGISTRACIJA VOZILA
             </h3>
-            <ul className="text-white text-left w-full font-atkinson text-[14px] md:text-[16px] lg:text-[16px] leading-5 md:leading-6 space-y-2">
-              <li>• Kompletna registracija bez odlaska u MUP</li>
-              <li>• Izdavanje registracionih nalepnica</li>
-              <li>• Prevod vozila i prenos vlasništva (kupoprodajni ugovori, ovlašćenja)</li>
-              <li>• Plaćanje poreza</li>
-              <li>• Transport ili prevoženje neregistrovanih vozila na tehnički pregled</li>
-              <li>• Pomoć prilikom uvoza, carinjenja i prilikom prve registracije vozila</li>
-            </ul>
-          </div>
-          {/* Box 2: Osiguranje vozila */}
-          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-10 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
-            <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+            <ul className="text-white text-left w-full font-atkinson text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-5 md:leading-6 space-y-4">
+                <li>• Kompletna registracija bez odlaska u MUP</li>
+                <li>• Izdavanje registracionih nalepnica</li>
+                <li>• Prevod vozila i prenos vlasništva (kupoprodajni ugovori, ovlašćenja)</li>
+                <li>• Plaćanje poreza</li>
+                <li>• Transport ili prevoženje neregistrovanih vozila na tehnički pregled</li>
+                <li>• Pomoć prilikom uvoza, carinjenja i prilikom prve registracije vozila</li>
+              </ul>
+            </div>
+                      {/* Box 2: Osiguranje vozila */}
+          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+                          <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
               OSIGURANJE VOZILA
             </h3>
-            <ul className="text-white text-left w-full font-atkinson text-[14px] md:text-[16px] lg:text-[16px] leading-5 md:leading-6 space-y-2">
-              <li>• Izdavanje polise osiguranja od autoodgovornosti</li>
-              <li>• Dodatna osiguranja vozila (Osiguranja stakala, osiguranja putnika)</li>
-              <li>• Izdavanje zelenih kartona</li>
-              <li>• Plaćanje gotovinom, čekovima na 6 mesečnih rata bez kamate, karticama i administrativnim zabranama</li>
-            </ul>
+            <ul className="text-white text-left w-full font-atkinson text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-5 md:leading-6 space-y-4">
+                <li>• Izdavanje polise osiguranja od autoodgovornosti</li>
+                <li>• Dodatna osiguranja vozila (Osiguranja stakala, osiguranja putnika)</li>
+                <li>• Izdavanje zelenih kartona</li>
+                <li>• Plaćanje gotovinom, čekovima na 6 mesečnih rata bez kamate, karticama i administrativnim zabranama</li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Technical Inspection Section */}
-      <section id="tehnicki-pregled" className="w-full bg-white py-20 overflow-x-hidden relative">
+        {/* Technical Inspection Section */}
+        <section 
+          id="tehnicki-pregled" 
+          className="w-full py-20 overflow-x-hidden relative"
+        >
         {/* Car image - positioned to drive in from left */}
-        <div className="absolute left-0 bottom-[10%] z-0" style={{pointerEvents: 'none', overflow: 'visible'}}>
+        <div className="absolute left-0 bottom-[10%] z-30" style={{pointerEvents: 'none', overflow: 'visible'}}>
           <img
             src={carImg}
             alt="Crveni automobil"
@@ -455,53 +426,53 @@ function App() {
           />
         </div>
         {/* Centered content: left text and right boxes */}
-        <div className="max-w-7xl mx-auto flex flex-row justify-between items-start gap-12 relative z-10 w-full">
+        <div className="max-w-7xl mx-auto flex flex-row justify-between items-start gap-12 relative z-20 w-full">
           {/* Left Side */}
-          <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-10">
+          <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-30">
             {/* Header and description at the top, with left padding */}
-            <div className="px-4">
-              <h2 className="text-[#232323] font-raleway font-bold text-[32px] md:text-[40px] lg:text-[48px] leading-tight text-left mb-6">
+            <div className="pl-0">
+              <h2 className="text-white font-raleway font-bold text-[32px] md:text-[40px] lg:text-[48px] leading-tight text-left mb-6">
                 TEHNIČKI PREGLED VOZILA
               </h2>
-              <p className="font-atkinson text-[18px] md:text-[20px] lg:text-[24px] leading-[28px] md:leading-[32px] text-left text-[#232323] mb-16">
+              <p className="font-atkinson text-[18px] md:text-[20px] lg:text-[24px] leading-[28px] md:leading-[32px] text-left text-white mb-16">
                 Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
               </p>
             </div>
           </div>
           {/* Right Side */}
-          <div className="flex flex-col flex-1 max-w-[520px] gap-6 mt-2 z-20">
+          <div className="flex flex-col flex-1 max-w-[520px] gap-6 mt-2 z-30 pr-8">
             {/* Box 1 */}
-            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
               <span className="text-white font-raleway font-bold text-[32px] text-left">Putnička vozila</span>
               <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 2 */}
-            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
               <span className="text-white font-raleway font-bold text-[32px] text-left">Autobusi</span>
               <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 3 */}
-            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
               <span className="text-white font-raleway font-bold text-[32px] text-left">Mopedi</span>
               <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 4 */}
-            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
               <span className="text-white font-raleway font-bold text-[32px] text-left">Motocikli</span>
               <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 5 */}
-            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
               <span className="text-white font-raleway font-bold text-[32px] text-left">Kvadovi</span>
               <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 6: Teretna vozila */}
-            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
               <div className="flex items-center justify-between">
                 <span className="text-white font-raleway font-bold text-[32px] text-left">Teretna vozila</span>
                 <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
@@ -510,10 +481,10 @@ function App() {
                 <li className="list-disc">Sve vrste teretnih vozila</li>
                 <li className="list-disc">Sve vrste priključnih vozila</li>
               </ul>
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
             {/* Box 7: Radne mašine */}
-            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full" style={{borderRadius:0}}>
+            <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
               <div className="flex items-center justify-between">
                 <span className="text-white font-raleway font-bold text-[32px] text-left">Radne mašine</span>
                 <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
@@ -522,7 +493,7 @@ function App() {
                 <li className="list-disc">Vangabaritna vozila</li>
                 <li className="list-disc">Traktori</li>
               </ul>
-              <div style={{position:'absolute',left:'12px',right:'0',bottom:'-10px',height:'12px',background:'rgba(0,0,0,0.35)',borderRadius:0,filter:'blur(6px)',zIndex:0}}></div>
+              <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
             </div>
           </div>
         </div>
@@ -555,8 +526,8 @@ function App() {
           }
         `}</style>
 
-
       </section>
+      </div>
 
       {/* Mission, Vision, Goals Section */}
       <section
@@ -617,18 +588,25 @@ function App() {
       {/* Carousel Section */}
       <section id="onama" className="w-full bg-white py-20 flex flex-col items-center">
         <div className="w-full max-w-5xl mx-auto px-4">
-          <h2 className="font-railway font-bold text-[48px] text-[#1D1D1D] text-left leading-none mb-6">O NAMA</h2>
-          <p className="font-atkinson text-[24px] text-left text-[#1D1D1D] mb-10 max-w-4xl">
+          <h2 className="font-railway font-bold text-[48px] text-[#1D1D1D] text-center xl:text-left leading-none mb-6">O NAMA</h2>
+          <p className="font-atkinson text-[24px] text-center xl:text-left text-[#1D1D1D] mb-10 max-w-4xl mx-auto xl:mx-0">
             Tehnički pregled OLIVER d.o.o. je privatno porodično preduzeće koje je počelo sa radom 2025. godine nakon dugogodišnjeg iskustva vlasnika i celog tima u poslovima tehničkog pregleda vozila.
           </p>
-          {/* Carousel */}
-          <Carousel />
+          {/* Responsive Carousel */}
+          <ResponsiveCarousel />
         </div>
 
       </section>
 
       {/* Our Team Section */}
-      <section id="nastim" className="w-full bg-[#1D1D1D] py-20">
+      <section 
+        id="nastim" 
+        className="w-full py-20 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${teamBg})`,
+          backgroundColor: '#1D1D1D',
+        }}
+      >
         <div className="w-full max-w-7xl mx-auto px-4">
           <div className="mb-16">
             <h2 className="font-raleway font-bold text-[48px] text-white text-left leading-none mb-6">
@@ -930,11 +908,11 @@ function App() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-[#DA0D14] text-white rounded-full shadow-lg hover:bg-[#87171B] transition-all duration-300 z-50 flex items-center justify-center group"
+          className="fixed bottom-8 right-8 w-16 h-16 bg-[#DA0D14] text-white rounded-full shadow-lg hover:bg-[#87171B] transition-all duration-300 z-50 flex items-center justify-center group"
           aria-label="Scroll to top"
         >
           <svg 
-            className="w-6 h-6 transform transition-transform duration-300 group-hover:-translate-y-1" 
+            className="w-8 h-8 transform transition-transform duration-300 group-hover:-translate-y-1" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -954,14 +932,339 @@ function App() {
 
 export default App;
 
+// Responsive Carousel wrapper component
+function ResponsiveCarousel() {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1300); // Use 1300px breakpoint
+    };
+
+    // Check initial screen size
+    checkScreenSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Render appropriate carousel based on screen size
+  return isMobile ? <DragCarousel /> : <Carousel />;
+}
+
+// Drag-based Mobile Carousel component (EXACT mimic of original example)
+function DragCarousel() {
+  // All available images for carousel
+  const allImages = [
+    carousel15, carousel3, carousel12, carousel6, carousel21, carousel10,
+    carousel22, carousel13, carousel7, carousel20, carousel16, carousel9,
+    carousel18, carousel5, slajd3, slajd1, slajd5, slajd4
+  ];
+
+  const containerRef = React.useRef(null);
+  const cardsRef = React.useRef([]);
+  
+  // Carousel data (matching original)
+  const centerIndex = (allImages.length - 1) / 2;
+  const [cardWidth, setCardWidth] = React.useState(80); // 80% as in original
+  const [xScale, setXScale] = React.useState({});
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [smoothReturn, setSmoothReturn] = React.useState(false);
+
+  // Calculate scale (exact from original)
+  const calcScale = React.useCallback((x) => {
+    const formula = 1 - (1 / 5) * Math.pow(x, 2);
+    return formula <= 0 ? 0 : formula;
+  }, []);
+
+  // Calculate scale2 (exact from original)
+  const calcScale2 = React.useCallback((x) => {
+    if (x <= 0) {
+      return 1 - (-1 / 5) * x;
+    } else {
+      return 1 - (1 / 5) * x;
+    }
+  }, []);
+
+  // Calculate position (exact from original)
+  const calcPos = React.useCallback((x, scale) => {
+    let formula;
+    
+    if (x < 0) {
+      formula = (scale * 100 - cardWidth) / 2;
+      return formula;
+    } else if (x > 0) {
+      formula = 100 - (scale * 100 + cardWidth) / 2;
+      return formula;
+    } else {
+      formula = 100 - (scale * 100 + cardWidth) / 2;
+      return formula;
+    }
+  }, [cardWidth]);
+
+  // Update cards (exact from original)
+  const updateCards = React.useCallback((cardIndex, data) => {
+    const cardElement = cardsRef.current[cardIndex];
+    if (!cardElement) return;
+
+    if (data.x !== undefined) {
+      cardElement.dataset.x = data.x;
+    }
+    
+    if (data.scale !== undefined) {
+      cardElement.style.transform = `scale(${data.scale})`;
+      cardElement.style.opacity = data.scale === 0 ? 0 : 1;
+    }
+   
+    if (data.leftPos !== undefined) {
+      cardElement.style.left = `${data.leftPos}%`;
+    }
+    
+    if (data.zIndex !== undefined) {
+      if (data.zIndex === 0) {
+        cardElement.classList.add('highlight');
+      } else {
+        cardElement.classList.remove('highlight');
+      }
+      cardElement.style.zIndex = data.zIndex;
+    }
+  }, []);
+
+  // Check ordering (exact from original)
+  const checkOrdering = React.useCallback((cardIndex, x, xDist) => {
+    const cardElement = cardsRef.current[cardIndex];
+    if (!cardElement) return x;
+
+    const original = parseInt(cardElement.dataset.x || '0');
+    const rounded = Math.round(xDist);
+    let newX = x;
+    
+    if (x !== x + rounded) {
+      if (x + rounded > original) {
+        if (x + rounded > centerIndex) {
+          newX = ((x + rounded - 1) - centerIndex) - rounded + -centerIndex;
+        }
+      } else if (x + rounded < original) {
+        if (x + rounded < -centerIndex) {
+          newX = ((x + rounded + 1) + centerIndex) - rounded + centerIndex;
+        }
+      }
+      
+      setXScale(prev => ({ ...prev, [newX + rounded]: cardIndex }));
+    }
+    
+    const temp = -Math.abs(newX + rounded);
+    updateCards(cardIndex, { zIndex: temp });
+
+    return newX;
+  }, [centerIndex, updateCards]);
+
+  // Move cards (exact from original)
+  const moveCards = React.useCallback((data) => {
+    let xDist;
+    
+    if (data !== null) {
+      setSmoothReturn(false);
+      xDist = data.x / 250; // Exact sensitivity from original
+    } else {
+      setSmoothReturn(true);
+      xDist = 0;
+
+      // Reset positions on drag end
+      Object.keys(xScale).forEach(x => {
+        const cardIndex = xScale[x];
+        updateCards(cardIndex, {
+          x: x,
+          zIndex: Math.abs(Math.abs(x) - centerIndex)
+        });
+      });
+    }
+
+    // Update all cards
+    allImages.forEach((_, i) => {
+      const cardElement = cardsRef.current[i];
+      if (!cardElement) return;
+
+      const x = checkOrdering(i, parseInt(cardElement.dataset.x || '0'), xDist);
+      const scale = calcScale(x + xDist);
+      const scale2 = calcScale2(x + xDist);
+      const leftPos = calcPos(x + xDist, scale2);
+      
+      updateCards(i, {
+        scale: scale,
+        leftPos: leftPos
+      });
+    });
+  }, [xScale, centerIndex, cardWidth, allImages, calcPos, checkOrdering, calcScale, calcScale2, updateCards]);
+
+  // Build initial layout (exact from original)
+  const build = React.useCallback(() => {
+    const newXScale = {};
+    
+    allImages.forEach((_, i) => {
+      const x = i - centerIndex;
+      const scale = calcScale(x);
+      const scale2 = calcScale2(x);
+      const zIndex = -(Math.abs(i - centerIndex));
+      const leftPos = calcPos(x, scale2);
+     
+      newXScale[x] = i;
+      
+      updateCards(i, {
+        x: x,
+        scale: scale,
+        leftPos: leftPos,
+        zIndex: zIndex
+      });
+    });
+    
+    setXScale(newXScale);
+  }, [centerIndex, cardWidth, calcPos, calcScale, calcScale2, updateCards]);
+
+
+
+  // Dragging event system (simplified from original)
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    let startX = 0;
+
+    const handleMouseDown = (e) => {
+      e.preventDefault();
+      setIsDragging(true);
+      startX = e.clientX;
+
+      const handleMouseMove = (e2) => {
+        moveCards({ x: e2.clientX - startX });
+      };
+
+      const clearEvents = () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', clearEvents);
+        document.removeEventListener('mouseleave', clearEvents);
+        moveCards(null);
+        setIsDragging(false);
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', clearEvents);
+      document.addEventListener('mouseleave', clearEvents);
+    };
+
+    const handleTouchStart = (e) => {
+      setIsDragging(true);
+      startX = e.touches[0].clientX;
+
+      const handleTouchMove = (e2) => {
+        moveCards({ x: e2.touches[0].clientX - startX });
+      };
+
+      const clearEvents = () => {
+        window.removeEventListener('touchmove', handleTouchMove);
+        window.removeEventListener('touchend', clearEvents);
+        moveCards(null);
+        setIsDragging(false);
+      };
+
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', clearEvents);
+    };
+
+    container.addEventListener('mousedown', handleMouseDown);
+    container.addEventListener('touchstart', handleTouchStart);
+
+    return () => {
+      container.removeEventListener('mousedown', handleMouseDown);
+      container.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, [moveCards]);
+
+  // Initialize on mount (only once)
+  React.useEffect(() => {
+    build();
+  }, []); // Empty dependency array to run only once
+
+  // Update card width on resize
+  React.useEffect(() => {
+    const updateCardWidth = () => {
+      if (containerRef.current && cardsRef.current[0]) {
+        const newCardWidth = (cardsRef.current[0].offsetWidth / containerRef.current.offsetWidth) * 100;
+        setCardWidth(newCardWidth);
+        // Rebuild after a short delay to avoid infinite loops
+        setTimeout(() => {
+          const newXScale = {};
+          allImages.forEach((_, i) => {
+            const x = i - centerIndex;
+            const scale = calcScale(x);
+            const scale2 = calcScale2(x);
+            const zIndex = -(Math.abs(i - centerIndex));
+            const leftPos = calcPos(x, scale2);
+            newXScale[x] = i;
+            updateCards(i, {
+              x: x,
+              scale: scale,
+              leftPos: leftPos,
+              zIndex: zIndex
+            });
+          });
+          setXScale(newXScale);
+        }, 100);
+      }
+    };
+
+    window.addEventListener('resize', updateCardWidth);
+    return () => window.removeEventListener('resize', updateCardWidth);
+  }, [centerIndex, calcScale, calcScale2, calcPos, updateCards]);
+
+  return (
+    <div className="w-full overflow-hidden py-5">
+      <div 
+        ref={containerRef}
+        className={`relative mx-auto w-full h-[350px] min-w-[600px] ${smoothReturn ? 'transition-all duration-200 ease-out' : ''}`}
+        style={{ filter: isDragging ? 'brightness(0.95)' : 'brightness(1)' }}
+      >
+        {allImages.map((image, index) => (
+          <div
+            key={index}
+            ref={el => cardsRef.current[index] = el}
+            className="absolute w-4/5 max-w-[280px] min-w-[250px] h-[350px] bg-white shadow-lg rounded-2xl flex flex-col items-center justify-center transition-inherit cursor-pointer select-none overflow-hidden brightness-90 hover:brightness-100"
+            style={{
+              boxShadow: '0px 5px 5px 0px rgba(0,0,0,0.3)'
+            }}
+            data-x="0"
+          >
+            <img
+              src={image}
+              alt={`carousel-${index}`}
+              className="w-full h-full object-cover"
+              draggable={false}
+            />
+          </div>
+        ))}
+      </div>
+      
+      {/* Custom CSS for highlight class (exact from original) */}
+      <style>{`
+        .highlight {
+          filter: brightness(1) !important;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 // Carousel component
 function Carousel() {
   // All available images for carousel (excluding logos, icons, backgrounds, and team photos)
   const allImages = [
-    // Carousel images - manually randomized order
-    carousel15, carousel8, carousel3, carousel19, carousel12, carousel6, carousel21, carousel1, carousel17, carousel10,
-    carousel4, carousel22, carousel13, carousel7, carousel20, carousel2, carousel16, carousel9, carousel14, carousel11,
-    carousel18, carousel5, slajd3, slajd1, slajd5, slajd2, slajd4
+    // Carousel images - manually randomized order (removed missing images)
+    carousel15, carousel3, carousel12, carousel6, carousel21, carousel10,
+    carousel22, carousel13, carousel7, carousel20, carousel16, carousel9,
+    carousel18, carousel5, slajd3, slajd1, slajd5, slajd4
   ];
   
   const [current, setCurrent] = React.useState(0);
