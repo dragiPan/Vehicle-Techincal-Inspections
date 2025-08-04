@@ -43,7 +43,7 @@ import mirko_kontrolor from './assets/DSC_6244.JPG';
 import srdjan_kontrolor from './assets/DSC_6288.JPG';
 import dejan_kontrolor from './assets/DSC_6232.JPG';
 // White logo for footer
-import logoWhite from './assets/finalni oliver logo i kartice-beli.png';
+import logoWhite from './assets/oliver logo footer.png';
 
 const HERO_OPTIONS = [
   {
@@ -193,24 +193,39 @@ function App() {
     });
   };
 
-  // Car animation trigger
+  // Car animation trigger for both versions
   React.useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          // Handle both versions of car animations
           const carElement = document.getElementById('car-animation');
+          const carElementXL = document.getElementById('car-animation-xl');
+          
           if (carElement) {
             carElement.classList.add('drive-in');
+          }
+          if (carElementXL) {
+            carElementXL.classList.add('drive-in');
           }
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.3 });
 
-    // Find the section containing the car animation
+    // Find sections containing the car animations
     const carElement = document.getElementById('car-animation');
+    const carElementXL = document.getElementById('car-animation-xl');
+    
     if (carElement) {
       const sectionElement = carElement.closest('section');
+      if (sectionElement) {
+        observer.observe(sectionElement);
+      }
+    }
+    
+    if (carElementXL) {
+      const sectionElement = carElementXL.closest('section');
       if (sectionElement) {
         observer.observe(sectionElement);
       }
@@ -583,12 +598,13 @@ function App() {
         </div>
       </section>
 
-      {/* Continuous Background Container for Registration/Insurance and Technical Inspection */}
+      {/* Combined Background Container for Both Sections */}
       <div 
         className="relative w-full bg-cover bg-no-repeat"
         style={{
-          backgroundImage: `url(${fullContentBg})`,
-          backgroundPosition: '-100px -165px',
+          backgroundImage: window.innerWidth >= 1280 ? `url(${fullContentBg})` : `url(${fonPogledBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           backgroundColor: '#ffffff',
         }}
       >
@@ -597,9 +613,14 @@ function App() {
           id="registracija-osiguranje"
           className="w-full py-20 flex justify-center items-center"
         >
-                  <div className="flex flex-row flex-wrap justify-center items-stretch gap-12 w-full max-w-7xl px-4">
+          <div className="flex flex-col items-center gap-8 w-full max-w-7xl px-4">
           {/* Box 1: Registracija vozila */}
-          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+            <div className="bg-[#5C5C5C] shadow-lg flex flex-col items-center" 
+                 style={{
+                   width: '608px',
+                   height: '454px',
+                   padding: '40px 48px'
+                 }}>
                                       <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
               REGISTRACIJA VOZILA
             </h3>
@@ -613,7 +634,12 @@ function App() {
               </ul>
             </div>
                       {/* Box 2: Osiguranje vozila */}
-          <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+            <div className="bg-[#5C5C5C] shadow-lg flex flex-col items-center" 
+                 style={{
+                   width: '608px',
+                   height: '454px',
+                   padding: '40px 48px'
+                 }}>
                           <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
               OSIGURANJE VOZILA
             </h3>
@@ -651,8 +677,8 @@ function App() {
             {/* Centered content: left text and right boxes */}
             <div className="mx-auto flex flex-row justify-between items-start relative z-20 w-full">
               {/* Left Side */}
-              <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-30 lg:ml-10 xl:ml-10 pr-32 2xl:ml-32 pr-32">
-                {/* Header and description at the top, with left padding */}
+              <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-30 lg:ml-10 xl:ml-20 2xl:ml-32 pr-32">
+                {/* Header and description at the top, with responsive left padding */}
                 <div>
                   <h2 className="text-white font-raleway font-bold text-[32px] lg:text-[36px] xl:text-[40px] leading-tight text-left mb-6">
                     TEHNIČKI PREGLED VOZILA
@@ -663,42 +689,42 @@ function App() {
                 </div>
               </div>
               {/* Right Side */}
-              <div className="flex flex-col flex-1 max-w-[520px] gap-6 z-30 pr-8 mr-10 lg:mr-20 xl:mr-30 2xl:mr-50">
+              <div className="flex flex-col flex-1 max-w-[520px] gap-6 z-30 pr-2 lg:mr-10 xl:mr-20 2xl:mr-32">
                 {/* Box 1 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[32px] text-left">Putnička vozila</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 2 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[32px] text-left">Autobusi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 3 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[32px] text-left">Mopedi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 4 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[32px] text-left">Motocikli</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 5 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[32px] text-left">Kvadovi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 6: Teretna vozila */}
                 <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
                   <div className="flex items-center justify-between">
                     <span className="text-white font-raleway font-bold text-[32px] text-left">Teretna vozila</span>
-                    <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                    <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   </div>
                   <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
                     <li className="list-disc">Sve vrste teretnih vozila</li>
@@ -710,7 +736,7 @@ function App() {
                 <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
                   <div className="flex items-center justify-between">
                     <span className="text-white font-raleway font-bold text-[32px] text-left">Radne mašine</span>
-                    <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-4" />
+                    <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
                   </div>
                   <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
                     <li className="list-disc">Vangabaritna vozila</li>
@@ -721,16 +747,8 @@ function App() {
               </div>
             </div>
           </div>
-
           {/* Mobile/Tablet Layout (below LG) */}
-          <div className="lg:hidden relative w-full py-20 overflow-x-hidden"
-            style={{
-              backgroundImage: `url(${fonPogledBg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundColor: '#ffffff',
-            }}
-          >
+          <div className="lg:hidden relative w-full py-20">
             <div className="max-w-4xl mx-auto px-4">
               {/* Header and Description - Centered */}
               <div className="text-center mb-12">
@@ -742,12 +760,17 @@ function App() {
                 </p>
               </div>
 
-              {/* Car Image - Centered */}
-              <div className="flex justify-center mb-12">
+              {/* Car Image - Positioned for animation */}
+              <div className="relative flex justify-center mb-12 overflow-hidden">
                 <img
                   src={carImg}
                   alt="Crveni automobil"
+                  id="car-animation"
                   className="w-[80%] max-w-[400px] h-auto"
+                  style={{
+                    transform: 'translateX(-100%)',
+                    transition: 'transform 2s ease-out'
+                  }}
                 />
               </div>
 
@@ -756,38 +779,38 @@ function App() {
                 {/* Box 1 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-6 py-4 min-h-[60px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Putnička vozila</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 2 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-6 py-4 min-h-[60px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Autobusi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 3 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-6 py-4 min-h-[60px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Mopedi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 4 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-6 py-4 min-h-[60px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Motocikli</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 5 */}
                 <div className="relative flex items-center justify-between bg-[#1A1A1A] px-6 py-4 min-h-[60px] w-full rounded-none">
                   <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Kvadovi</span>
-                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                  <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
                 </div>
                 {/* Box 6: Teretna vozila */}
                 <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-6 py-4 min-h-[80px] w-full rounded-none">
                   <div className="flex items-center justify-between">
                     <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Teretna vozila</span>
-                    <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                    <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   </div>
                   <ul className="text-white font-atkinson text-[16px] md:text-[18px] leading-6 text-left pl-4 mt-2">
                     <li className="list-disc">Sve vrste teretnih vozila</li>
@@ -799,7 +822,7 @@ function App() {
                 <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-6 py-4 min-h-[80px] w-full rounded-none">
                   <div className="flex items-center justify-between">
                     <span className="text-white font-raleway font-bold text-[20px] md:text-[24px] text-left">Radne mašine</span>
-                    <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-4" />
+                    <img src={checkboxImg} alt="checkbox" className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4" />
                   </div>
                   <ul className="text-white font-atkinson text-[16px] md:text-[18px] leading-6 text-left pl-4 mt-2">
                     <li className="list-disc">Vangabaritna vozila</li>
@@ -819,6 +842,14 @@ function App() {
             100% { transform: translateX(-40%);  }
           }
 
+          @keyframes carDriveInMobile {
+            0%   { transform: translateX(-100%); }
+            70%  { transform: translateX(0%);  }
+            100% { transform: translateX(0%);  }
+          }
+
+          /* Desktop version (LG and above) */
+          @media (min-width: 1024px) {
           #car-animation {
             width: 180% !important;
             transform: translateX(-100%);
@@ -828,20 +859,168 @@ function App() {
             animation: carDriveIn 1.8s ease-out forwards;
           }
 
-          /* Responsive tweaks */
+            /* Responsive tweaks for desktop */
           @media (max-width:1200px){
             #car-animation{ width:160% !important; }
           }
-          @media (max-width:768px){
-            #car-animation{ width:140% !important; }
           }
-          @media (max-width:480px){
-            #car-animation{ width:120% !important; }
+
+          /* Mobile version (below LG) */
+          @media (max-width: 1023px) {
+            #car-animation {
+              transform: translateX(-100%) !important;
+            }
+            
+            #car-animation.drive-in {
+              animation: carDriveInMobile 1.8s ease-out forwards !important;
+            }
           }
         `}</style>
         </section>
       </div>
 
+      {/* Combined Background Container for Both Sections - Above XL */}
+      <div 
+        className="hidden xl:block relative w-full bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: `url(${fullContentBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundColor: '#ffffff',
+        }}
+      >
+        {/* Registration & Insurance Section */}
+        <section
+          className="w-full py-20 flex justify-center items-center"
+        >
+          <div className="flex flex-row flex-wrap justify-center items-stretch gap-12 w-full max-w-7xl px-4">
+            {/* Box 1: Registracija vozila */}
+            <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+              <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+                REGISTRACIJA VOZILA
+              </h3>
+              <ul className="text-white text-left w-full font-atkinson text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-5 md:leading-6 space-y-4">
+                <li>• Kompletna registracija bez odlaska u MUP</li>
+                <li>• Izdavanje registracionih nalepnica</li>
+                <li>• Prevod vozila i prenos vlasništva (kupoprodajni ugovori, ovlašćenja)</li>
+                <li>• Plaćanje poreza</li>
+                <li>• Transport ili prevoženje neregistrovanih vozila na tehnički pregled</li>
+                <li>• Pomoć prilikom uvoza, carinjenja i prilikom prve registracije vozila</li>
+              </ul>
+            </div>
+            {/* Box 2: Osiguranje vozila */}
+            <div className="bg-[#5C5C5C] shadow-lg py-8 px-4 md:py-10 md:px-12 flex flex-col items-center w-full max-w-[700px] flex-1 min-w-[220px] min-h-[180px] md:min-h-[220px] h-auto">
+              <h3 className="text-white text-[22px] md:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
+                OSIGURANJE VOZILA
+              </h3>
+              <ul className="text-white text-left w-full font-atkinson text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-5 md:leading-6 space-y-4">
+                <li>• Izdavanje polise osiguranja od autoodgovornosti</li>
+                <li>• Dodatna osiguranja vozila (Osiguranja stakala, osiguranja putnika)</li>
+                <li>• Izdavanje zelenih kartona</li>
+                <li>• Plaćanje gotovinom, čekovima na 6 mesečnih rata bez kamate, karticama i administrativnim zabranama</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Technical Inspection Section for XL+ */}
+        <section 
+          className="w-full py-20 overflow-x-hidden relative"
+        >
+          {/* Car image - positioned to drive in from left */}
+          <div className="absolute left-20 bottom-[5%] z-30 w-[75%] 2xl:w-[80%]" style={{pointerEvents: 'none', overflow: 'visible'}}>
+            <img
+              src={carImg}
+              alt="Crveni automobil"
+              id="car-animation-xl"
+              style={{
+                height: 'auto',
+                maxHeight: 'none',
+                opacity: 1,
+                transition: 'transform 2s ease-out'
+              }}
+            />
+          </div>
+          {/* Centered content: left text and right boxes */}
+          <div className="mx-auto flex flex-row justify-between items-start relative z-20 w-full">
+            {/* Left Side */}
+            <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[520px] z-30 lg:ml-10 xl:ml-20 2xl:ml-32 pr-32">
+              {/* Header and description at the top, with responsive left padding */}
+              <div>
+                <h2 className="text-white font-raleway font-bold text-[32px] lg:text-[36px] xl:text-[40px] leading-tight text-left mb-6">
+                  TEHNIČKI PREGLED VOZILA
+                </h2>
+                <p className="font-atkinson text-[18px] lg:text-[22px] xl:text-[28px] leading-[28px] md:leading-[32px] text-left text-white">
+                  Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
+                </p>
+              </div>
+            </div>
+            {/* Right Side */}
+            <div className="flex flex-col flex-1 max-w-[520px] gap-6 z-30 pr-2 lg:pr-4 xl:pr-6 2xl:pr-8 mr-10 lg:mr-20 xl:mr-30 2xl:mr-50">
+              {/* Vehicle type boxes - same as below XL version */}
+              <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Putnička vozila</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Autobusi</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Mopedi</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Motocikli</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex items-center justify-between bg-[#1A1A1A] px-8 py-4 min-h-[64px] w-full rounded-none">
+                <span className="text-white font-raleway font-bold text-[32px] text-left">Kvadovi</span>
+                <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-raleway font-bold text-[32px] text-left">Teretna vozila</span>
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                </div>
+                <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
+                  <li className="list-disc">Sve vrste teretnih vozila</li>
+                  <li className="list-disc">Sve vrste priključnih vozila</li>
+                </ul>
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+              <div className="relative flex flex-col justify-between bg-[#1A1A1A] px-8 py-4 min-h-[90px] w-full rounded-none">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-raleway font-bold text-[32px] text-left">Radne mašine</span>
+                  <img src={checkboxImg} alt="checkbox" className="w-8 h-8 ml-2 lg:ml-4" />
+                </div>
+                <ul className="text-white font-atkinson text-[20px] leading-6 text-left pl-4 mt-2">
+                  <li className="list-disc">Vangabaritna vozila</li>
+                  <li className="list-disc">Traktori</li>
+                </ul>
+                <div className="absolute left-3 right-0 -bottom-2.5 h-3 bg-black/35 rounded-none blur-sm z-0"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Animation styles for XL version */}
+          <style>{`
+            #car-animation-xl {
+              width: 180% !important;
+              transform: translateX(-100%);
+            }
+            
+            #car-animation-xl.drive-in {
+              animation: carDriveIn 1.8s ease-out forwards;
+          }
+        `}</style>
+        </section>
+      </div>
       {/* Mission, Vision, Goals Section */}
       <section
         className="relative w-full min-h-[520px] flex items-center py-24 bg-cover bg-center"
@@ -850,7 +1029,7 @@ function App() {
         }}
       >
         {/* Overlay for readability */}
-        <div className="relative z-10 flex flex-row items-start w-full max-w-6xl mx-auto px-4">
+        <div className="relative z-10 flex flex-row items-start w-full max-w-6xl px-10 mx-auto md:px-20">
           {/* Left: Circles and line */}
           <div className="flex flex-col items-center relative mr-12" style={{minWidth: '64px', height: '100%'}}>
             {/* Vertical red line */}
@@ -914,7 +1093,7 @@ function App() {
       {/* Our Team Section */}
       <section 
         id="nastim" 
-        className="w-full py-20 bg-cover bg-center"
+        className="w-full py-20 bg-no-repeat bg-fixed bg-cover"
         style={{
           backgroundImage: `url(${teamBg})`,
           backgroundColor: '#1D1D1D',
@@ -922,171 +1101,169 @@ function App() {
       >
         <div className="w-full max-w-7xl mx-auto px-4">
           <div className="mb-16">
-            <h2 className="font-raleway font-bold text-[48px] text-white text-left leading-none mb-6">
+            <h2 className="font-raleway font-bold text-[48px] text-white leading-none mb-6 text-center lg:text-left lg:ml-20">
               NAŠ TIM
-            </h2>
-            <p className="font-atkinson text-[24px] text-white text-left leading-relaxed max-w-4xl">
+            </h2>            
+            <p className="font-atkinson text-[24px] text-white text-center leading-relaxed px-15 lg:px-0 lg:text-left lg:ml-20 lg:max-w-4xl">
               Naš tim čine profesionalno i ljubazno osoblje sa dugogodišnjim iskustvom u obavljanju tehničkog pregleda, registracije i osiguranja svih vrsta motornih vozila.
             </p>
           </div>
           
-          {/* Team Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Director */}
-            <div className="flex flex-col">
-              <img 
-                src={oliver_direktor} 
-                alt="Oliver Rađenović - Direktor" 
-                className="w-full h-[350px] object-cover"
-                style={{ width: '280px', height: '350px' }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Oliver Rađenović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Direktor
-                </p>
+          {/* Team Grid - Responsive Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+              {/* Director */}
+              <div className="flex flex-col mb-6">
+                <img 
+                  src={oliver_direktor} 
+                  alt="Oliver Rađenović - Direktor" 
+                  className="w-full h-[350px] object-cover"
+                  style={{ width: '280px', height: '350px' }}
+                />
+                <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                  <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                    Oliver Rađenović
+                  </h3>
+                  <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                    Direktor
+                  </p>
+                </div>
               </div>
-            </div>
+              {/* Manager */}
+              <div className="flex flex-col mb-6">
+                <img 
+                  src={veljko_menadzer} 
+                  alt="Veljko Rađenović - Menadžer" 
+                  className="w-full h-[350px] object-cover"
+                  style={{ width: '280px', height: '350px' }}
+                />
+                <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                  <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                    Veljko Rađenović
+                  </h3>
+                  <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                    Menadžer
+                  </p>
+                </div>
+              </div>
+              {/* Sales Agent */}
+              <div className="flex flex-col mb-6">
+                <img 
+                  src={natasa_agent} 
+                  alt="Nataša Mladenović - Agent prodaje u osiguranju" 
+                  className="w-full h-[350px] object-cover"
+                  style={{ 
+                    width: '280px', 
+                    height: '350px',
+                      objectPosition: 'center 10%'
+                  }}
+                />
+                <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                  <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                    Nataša Mladenović
+                  </h3>
+                  <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                    Agent prodaje u osiguranju
+                  </p>
+                </div>
+              </div>
 
-            {/* Manager */}
-            <div className="flex flex-col">
-              <img 
-                src={veljko_menadzer} 
-                alt="Veljko Rađenović - Menadžer" 
-                className="w-full h-[350px] object-cover"
-                style={{ width: '280px', height: '350px' }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Veljko Rađenović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Menadžer
-                </p>
+              {/* Lawyer */}
+              <div className="flex flex-col mb-6">
+                  <img 
+                    src={bozica_pravnik} 
+                    alt="Božica Radovanović - Diplomirani pravnik" 
+                    className="w-full h-[350px] object-cover"
+                    style={{ 
+                      width: '280px', 
+                       height: '350px',
+                       objectPosition: 'center 40%'
+                    }}
+                  />
+                  <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                    <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                      Božica Radovanović
+                    </h3>
+                    <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                      Diplomirani pravnik
+                    </p>                    
+                  </div>
               </div>
-            </div>
 
-            {/* Sales Agent */}
-            <div className="flex flex-col">
-              <img 
-                src={natasa_agent} 
-                alt="Nataša Mladenović - Agent prodaje u osiguranju" 
-                className="w-full h-[350px] object-cover"
-                style={{ 
-                  width: '280px', 
-                  height: '350px',
-                  objectPosition: 'center 10%' // More top-heavy cropping for better face framing
-                }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Nataša Mladenović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Agent prodaje u osiguranju
-                </p>
+              {/* Technical Inspector 1 */}
+              <div className="flex flex-col mb-6">
+                <img 
+                  src={sanja_kontrolor} 
+                  alt="Sanja Šekler - Kontrolor tehničkog pregleda" 
+                  className="w-full h-[350px] object-cover"
+                  style={{ width: '280px', height: '350px' }}
+                />
+                <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                  <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                    Sanja Šekler
+                  </h3>
+                  <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                    Kontrolor tehničkog pregleda
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Lawyer */}
-            <div className="flex flex-col">
-              <img 
-                src={bozica_pravnik} 
-                alt="Božica Radovanović - Diplomirani pravnik" 
-                className="w-full h-[350px] object-cover"
-                style={{ 
-                  width: '280px', 
-                  height: '350px',
-                  objectPosition: 'center 40%' // More bottom-heavy cropping for better face framing
-                }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Božica Radovanović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Diplomirani pravnik
-                </p>
+              {/* Technical Inspector 2 */}
+              <div className="flex flex-col mb-6">
+                <img 
+                  src={mirko_kontrolor} 
+                  alt="Mirko Vukadinović - Kontrolor tehničkog pregleda" 
+                  className="w-full h-[350px] object-cover"
+                  style={{ width: '280px', height: '350px' }}
+                />
+                <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                  <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                    Mirko Vukadinović
+                  </h3>
+                  <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                    Kontrolor tehničkog pregleda
+                  </p>
+                </div>
               </div>
-            </div>
+                {/* Technical Inspector 3 */}
+                <div className="flex flex-col mb-6 lg:pl-[100%] xl:pl-0">
+                  <img 
+                    src={srdjan_kontrolor} 
+                    alt="Srđan Nikolić - Kontrolor tehničkog pregleda" 
+                    className="w-full h-[350px] object-cover"
+                    style={{ width: '280px', height: '350px' }}
+                  />
+                  <div className="bg-white py-6 px-4" style={{ width: '280px' , height: '120px'}}>
+                    <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                      Srđan Nikolić
+                    </h3>
+                    <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                      Kontrolor tehničkog pregleda
+                    </p>
+                  </div>
+                </div>
 
-            {/* Technical Inspector 1 */}
-            <div className="flex flex-col">
-              <img 
-                src={sanja_kontrolor} 
-                alt="Sanja Šekler - Kontrolor tehničkog pregleda" 
-                className="w-full h-[350px] object-cover"
-                style={{ width: '280px', height: '350px' }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Sanja Šekler
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Kontrolor tehničkog pregleda
-                </p>
-              </div>
-            </div>
+                {/* Technical Inspector 4 */}
+                <div className="flex flex-col mb-6 lg:pl-[100%] xl:pl-0">
+                  <img 
+                    src={dejan_kontrolor} 
+                    alt="Dejan Obradović - Kontrolor tehničkog pregleda" 
+                    className="w-full h-[350px] object-cover"
+                    style={{ 
+                      width: '280px', 
+                      height: '350px',
+                        objectPosition: 'center 5%'
+                    }}
+                  />
+                  <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
+                    <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
+                      Dejan Obradović
+                    </h3>
+                    <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
+                      Kontrolor tehničkog pregleda
+                    </p>
+                  </div>
+                </div>
 
-            {/* Technical Inspector 2 */}
-            <div className="flex flex-col">
-              <img 
-                src={mirko_kontrolor} 
-                alt="Mirko Vukadinović - Kontrolor tehničkog pregleda" 
-                className="w-full h-[350px] object-cover"
-                style={{ width: '280px', height: '350px' }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Mirko Vukadinović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Kontrolor tehničkog pregleda
-                </p>
-              </div>
-            </div>
-
-            {/* Technical Inspector 3 */}
-            <div className="flex flex-col">
-              <img 
-                src={srdjan_kontrolor} 
-                alt="Srđan Nikolić - Kontrolor tehničkog pregleda" 
-                className="w-full h-[350px] object-cover"
-                style={{ width: '280px', height: '350px' }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Srđan Nikolić
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Kontrolor tehničkog pregleda
-                </p>
-              </div>
-            </div>
-
-            {/* Technical Inspector 4 */}
-            <div className="flex flex-col">
-              <img 
-                src={dejan_kontrolor} 
-                alt="Dejan Obradović - Kontrolor tehničkog pregleda" 
-                className="w-full h-[350px] object-cover"
-                style={{ 
-                  width: '280px', 
-                  height: '350px',
-                  objectPosition: 'center 5%' // More top-heavy cropping for better face framing
-                }}
-              />
-              <div className="bg-white py-6 px-4" style={{ width: '280px' }}>
-                <h3 className="font-atkinson font-bold text-[24px] text-black text-left leading-none mb-2">
-                  Dejan Obradović
-                </h3>
-                <p className="font-atkinson font-normal text-[20px] text-black text-left leading-none">
-                  Kontrolor tehničkog pregleda
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -1109,14 +1286,22 @@ function App() {
       <footer id="kontakt" className="w-full bg-[#1D1D1D] py-20">
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Main Footer Content */}
-          <div className="flex flex-col lg:flex-row justify-between items-start gap-20 mb-16">
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-10 lg:items-start mb-16 lg:pl-10">
+            {/* Contact Header - Centered below LG */}
+            <div className="lg:hidden">
+              <h2 className="font-raleway font-bold text-[48px] text-[#E9E9E9] text-center leading-none mb-12">
+                KONTAKT
+              </h2>
+            </div>
+
             {/* Left Column - Contact Information */}
-            <div className="flex-1 min-w-0 lg:min-w-[400px]">
-              <h2 className="font-raleway font-bold text-[48px] text-[#E9E9E9] text-center lg:text-center leading-none mb-12">
+            <div className="flex-1 lg:min-w-[400px] flex flex-col items-center lg:items-start">
+              {/* Contact Header - Hidden below LG, shown above LG */}
+              <h2 className="hidden lg:block font-raleway font-bold text-[48px] text-[#E9E9E9] text-center leading-none mb-12">
                 KONTAKT
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-4xl">
                 {/* Location */}
                 <div className="flex items-start gap-4">
                   <svg className="w-6 h-6 text-[#DC1B21] mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -1134,7 +1319,7 @@ function App() {
 
                 {/* Phone Numbers */}
                 <div className="flex items-start gap-4">
-                  <svg className="w-6 h-6 text-[#DC1B21] mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-6 h-6 text-[#DC1B21] mt-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
                   <div className="flex flex-col space-y-2">
@@ -1180,7 +1365,7 @@ function App() {
             </div>
 
             {/* Center Column - Working Hours */}
-            <div className="flex-1 min-w-0 lg:min-w-[300px]">
+            <div className="flex-1 min-w-0 lg:min-w-[300px] flex flex-col items-start mr-30 lg:mr-0">
               <h3 className="font-inter font-medium text-[24px] text-white text-left leading-none mt-24 mb-8">
                 Radno vreme
               </h3>
