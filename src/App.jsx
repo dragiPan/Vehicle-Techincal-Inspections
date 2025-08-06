@@ -183,12 +183,17 @@ function App() {
 
     const element = document.getElementById(sectionId);
     if (element) {
-      // Always account for navbar height since it will become sticky during scroll
+      // Get the element's position relative to the document
+      const rect = element.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const elementPosition = rect.top + scrollTop;
+      
+      // Account for navbar height
       const offset = 70; // Fixed navbar height offset
-      const elementPosition = element.offsetTop - offset;
+      const targetPosition = elementPosition - offset;
       
       window.scrollTo({
-        top: elementPosition,
+        top: targetPosition,
         behavior: 'smooth'
       });
     }
@@ -391,25 +396,28 @@ function App() {
           {/* Video Section */}
           <div className="relative w-full h-[400px] bg-black overflow-hidden">
             <video
-              className="absolute top-0 left-0 w-full h-full object-cover"
+              className="absolute top-0 left-0 w-full h-full object-cover z-0"
               src={heroVideo}
               autoPlay
               loop
               muted
               playsInline
             />
-          </div>
-          
-          {/* Content Section with Gray Background */}
-          <div className="w-full bg-[#222222] py-16 px-8">
-            <div className="max-w-4xl mx-auto">
-              {/* Header Text */}
-              <div className="text-left mb-8">
-                <h1 className="font-inter font-semibold text-[24px] px-10 sm:text-[28px] text-white mb-6 leading-tight md:px-20">
+            {/* Drop shadow overlay */}
+            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-3/4 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+            {/* Header Text over video */}
+            <div className="absolute inset-0 z-20 flex items-end justify-center">
+              <div className="text-center px-10 md:px-20 mb-10">
+                <h1 className="font-inter font-semibold text-[24px] sm:text-[28px] text-white leading-tight drop-shadow-lg">
                   {HERO_CONTENT.title}
                 </h1>
               </div>
-              
+            </div>
+          </div>
+          
+          {/* Content Section with Gray Background */}
+          <div className="w-full bg-[#222222] pb-16 pt-10 px-8">
+            <div className="max-w-4xl mx-auto">            
               {/* Description Text */}
               <div className="text-left mb-12">
                 <p className="font-inter text-[16px] px-10 sm:text-[18px] text-white leading-relaxed mx-auto md:px-20">
@@ -592,15 +600,42 @@ function App() {
       </section>
 
       <div 
-        className="relative w-full bg-cover bg-no-repeat"
+        className="relative w-full bg-no-repeat"
         style={{
-            backgroundImage: `url(${window.innerWidth >= 768 ? fullContentBg : fonPogledBg})`,
-            backgroundPosition: window.innerWidth >= 1800 ? '-150px -165px' :
-              window.innerWidth >= 1600 ? '-300px -165px' :
-              window.innerWidth >= 1536 ? '-350px -165px' :
-              window.innerWidth >= 1280 ? '-300px -165px' :
-              window.innerWidth >= 1024 ? '-480px -165px' :
-              '-200px -165px',
+            backgroundSize: window.innerWidth >= 1024 ? 'cover' : 'contain',
+            backgroundImage: `url(${window.innerWidth >= 1024 ? fullContentBg : fonPogledBg})`,
+            backgroundPosition: 
+              windowWidth >= 2100 ? '0px -155px' :
+              window.innerWidth >= 2000 ? '-50px -155px' :
+              window.innerWidth >= 1800 ? '-100px -155px' :
+              window.innerWidth >= 1600 ? '-200px -155px' :
+              window.innerWidth >= 1536 ? '-310px -155px' :
+              window.innerWidth >= 1440 ? '-310px -155px' :
+              window.innerWidth >= 1400 ? '-350px -155px' :
+              window.innerWidth >= 1350 ? '-380px -155px' :
+              window.innerWidth >= 1300 ? '-400px -155px' :
+              window.innerWidth >= 1280 ? '-420px -155px' :
+              window.innerWidth >= 1200 ? '-460px -155px' :
+              window.innerWidth >= 1024 ? '-485px -155px' :
+              window.innerWidth >= 980 ? '0px -200px' :
+              window.innerWidth >= 950 ? '0px -150px' :
+              window.innerWidth >= 900 ? '0px -85px' :
+              window.innerWidth >= 850 ? '0px -30px' :
+              window.innerWidth >= 800 ? '0px 40px' :
+              window.innerWidth >= 750 ? '0px 80px' :
+              window.innerWidth >= 700 ? '0px 150px' :
+              window.innerWidth >= 650 ? '0px 220px' :
+              window.innerWidth >= 600 ? '0px 300px' :
+              window.innerWidth >= 550 ? '0px 400px' :
+              window.innerWidth >= 500 ? '0px 520px' :
+              window.innerWidth >= 450 ? '0px 650px' :
+              window.innerWidth >= 400 ? '0px 760px' :
+              window.innerWidth >= 375 ? '0px 800px' :
+              window.innerWidth >= 350 ? '0px 930px' :
+              '0px 1000px',
+              // window.innerWidth >= 768 ? '0px 30px' : 
+              // window.innerWidth >= 700 ? '0px 70px' :
+              // '0px 75px',
           backgroundColor: '#ffffff',
         }}
       >
@@ -643,7 +678,7 @@ function App() {
         {/* Technical Inspection Section */}
         <section 
           id="tehnicki-pregled" 
-          className="w-full py-20 overflow-x-hidden relative"
+          className="w-full pb-20 pt-0 overflow-x-hidden relative"
         >
           {/* Desktop Layout (LG and above) */}
           <div className="hidden lg:block">
@@ -663,15 +698,15 @@ function App() {
                 />
               </div>
             {/* Centered content: left text and right boxes */}
-              <div className="flex flex-row justify-between items-start relative z-20 w-full max-w-7xl mx-auto lg:px-10 xl:px-20 2xl:px-0">
+              <div className="flex flex-row justify-between items-start relative z-20 w-full max-w-7xl mx-auto lg:px-10 xl:pl-20 xl:pr-10 2xl:px-0">
               {/* Left Side */}
-                <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[460px] z-30 lg:pl-10 xl:pl-0 ">
+                <div className="flex flex-col justify-between h-full min-h-[600px] flex-1 max-w-[460px] z-30 lg:pl-10 xl:pl-0 xl:mr-10">
                 {/* Header and description at the top, with responsive left padding */}
                 <div>
-                    <h2 className="text-white font-raleway font-bold text-[32px] lg:text-[40px] xl:text-[48px] leading-tight text-left mb-6">
+                    <h2 className="text-white font-raleway font-bold text-[32px] lg:text-[40px] 2xl:text-[48px] leading-tight text-left mb-6">
                     TEHNIČKI PREGLED VOZILA
                   </h2>
-                    <p className="font-atkinson text-[20px] lg:text-[22px] xl:text-[24px] leading-[28px] md:leading-[25px] text-left text-white">
+                    <p className="font-atkinson text-[20px] lg:text-[22px] xl:text-[24px] leading-[28px] md:leading-[25px] text-left text-white lg:pr-10 xl:pr-10 2xl:pr-0">
                     Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
                   </p>
                 </div>
@@ -743,8 +778,8 @@ function App() {
                   <h2 className="text-white font-raleway font-bold text-[32px] sm:text-[36px] md:text-[42px] leading-tight mb-6">
                     TEHNIČKI PREGLED <br /> VOZILA
                 </h2>
-                  <p className="font-atkinson text-[20px] sm:text-[22px] md:text-[24px] leading-relaxed text-white mb-[120%]">
-                  Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
+                  <p className="font-atkinson text-[20px] sm:text-[22px] md:text-[24px] leading-relaxed text-white mb-[120%] pr-0">
+                  Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg <br /> posvećenog tima zaposlenih i saradnika.
                 </p>
               </div>
 
@@ -872,11 +907,59 @@ function App() {
               <div className="w-[5px] bg-[#DA0D14]" style={{ height: 'calc(100% - 64px)', opacity: 0.5, borderRadius: 0, minHeight: '340px' }} />
             </div>
             {/* Circle 1 */}
-            <div className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full mb-46 z-10" style={{ borderRadius: '120px', opacity: 1 }}>
+            <div 
+              className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full z-10" 
+              style={{ 
+                borderRadius: '120px', 
+                opacity: 1,
+                marginBottom:
+                            window.innerWidth <= 374 ? '300px' :
+                            window.innerWidth <= 385 ? '270px' :
+                            window.innerWidth <= 400 ? '240px' :
+                            window.innerWidth <= 450 ? '220px' :
+                            window.innerWidth <= 500 ? '180px' :
+                            window.innerWidth <= 539 ? '200px' :
+                            window.innerWidth <= 554 ? '180px' :
+                            window.innerWidth <= 600 ? '160px' :
+                            window.innerWidth <= 636 ? '160px' :
+                            window.innerWidth <= 638 ? '140px' :
+                            window.innerWidth <= 639 ? '130px' :
+                            window.innerWidth <= 650 ? '180px' :
+                            window.innerWidth <= 685 ? '180px' :
+                            window.innerWidth <= 687 ? '150px' :
+                            window.innerWidth <= 688 ? '180px' :
+                            window.innerWidth <= 768 ? '150px' :
+                            '180px',
+              }}
+            >
               <span className="text-white font-semibold text-2xl select-none font-atkinson">01</span>
             </div>
             {/* Circle 2 */}
-            <div className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full mb-46 z-10" style={{ borderRadius: '120px', opacity: 1 }}>
+            <div 
+              className="flex items-center justify-center w-16 h-16 bg-[#DA0D14] rounded-full z-10" 
+              style={{  
+                borderRadius: '120px', 
+                opacity: 1,
+                marginBottom:
+                            window.innerWidth <= 374 ? '300px' :
+                            window.innerWidth <= 385 ? '300px' :
+                            window.innerWidth <= 400 ? '290px' :
+                            window.innerWidth <= 450 ? '270px' :
+                            window.innerWidth <= 500 ? '220px' :
+                            window.innerWidth <= 539 ? '200px' :
+                            window.innerWidth <= 554 ? '170px' :
+                            window.innerWidth <= 600 ? '160px' :
+                            window.innerWidth <= 636 ? '170px' :
+                            window.innerWidth <= 638 ? '160px' :
+                            window.innerWidth <= 639 ? '140px' :
+                            window.innerWidth <= 650 ? '180px' :
+                            window.innerWidth <= 685 ? '180px' :
+                            window.innerWidth <= 687 ? '180px' :
+                            window.innerWidth <= 688 ? '180px' :
+                            window.innerWidth <= 768 ? '150px' :
+                            '180px',
+              }}
+            >
               <span className="text-white font-semibold text-2xl select-none font-atkinson">02</span>
             </div>
             {/* Circle 3 */}
@@ -888,22 +971,22 @@ function App() {
           <div className="flex flex-col gap-16 max-w-xl pl-0">
             {/* Row 1 */}
             <div className="flex flex-col justify-start">
-              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Misija</h3>
-              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+              <h3 className="text-white text-[30px] sm:text-[32px] md:text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Misija</h3>
+              <p className="text-white text-[18px] sm:text-[20px] md:text-[24px] leading-[28px] sm:leading-[32px] font-normal font-atkinson">
                 Misija naše kompanije je da na jednom mestu pruži kvalitetnu i brzu uslugu tehničkog pregleda i registracije svih motornih vozila na zadovoljstvo svih klijenata.
               </p>
             </div>
             {/* Row 2 */}
             <div className="flex flex-col justify-start">
-              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Vizija</h3>
-              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+              <h3 className="text-white text-[30px] sm:text-[32px] md:text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Vizija</h3>
+              <p className="text-white text-[18px] sm:text-[20px] md:text-[24px] leading-[28px] sm:leading-[32px] font-normal font-atkinson">
                 Vizija kompanije je da postavi visoke standarde u oblasti tehničkog pregleda i registracije vozila putem praćenja najnovijih trendova i uvođenja inovacija u ovoj oblasti.
               </p>
             </div>
             {/* Row 3 */}
             <div className="flex flex-col justify-start">
-              <h3 className="text-white text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Ciljevi</h3>
-              <p className="text-white text-[24px] leading-[32px] font-normal font-atkinson">
+              <h3 className="text-white text-[30px] sm:text-[32px] md:text-[36px] leading-[32px] font-normal mb-4 font-atkinson">Ciljevi</h3>
+              <p className="text-white text-[18px] sm:text-[20px] md:text-[24px] leading-[28px] sm:leading-[32px] font-normal font-atkinson">
                 Visok kvalitet pruženih usluga na zadovoljstvo naših klijenata kao rezultat rada našeg posvećenog tima zaposlenih i saradnika.
               </p>
             </div>
@@ -913,13 +996,15 @@ function App() {
 
       {/* Carousel Section */}
       <section id="onama" className="w-full bg-white py-20 flex flex-col items-center">
-        <div className="w-full max-w-5xl mx-auto px-18 lg:px-4">
+        <div className="w-full max-w-5xl mx-auto">
           <h2 className="font-railway font-bold text-[48px] text-[#1D1D1D] text-center xl:text-left leading-none mb-6">O NAMA</h2>
-          <p className="font-atkinson text-[24px] text-center xl:text-left text-[#1D1D1D] mb-10 max-w-4xl mx-auto xl:mx-0">
+          <p className="font-atkinson text-[24px] text-center xl:text-left text-[#1D1D1D] mb-10 max-w-4xl mx-auto xl:mx-0 px-10 sm:px-18 lg:px-4">
             Tehnički pregled OLIVER d.o.o. je privatno porodično preduzeće koje je počelo sa radom 2025. godine nakon dugogodišnjeg iskustva vlasnika i celog tima u poslovima tehničkog pregleda vozila.
           </p>
           {/* Responsive Carousel */}
-          <Carousel />
+          <div className="w-full max-w-5xl mx-auto px-18 lg:px-4">
+            <Carousel />
+          </div>
         </div>
 
       </section>
@@ -938,7 +1023,7 @@ function App() {
             <h2 className="font-raleway font-bold text-[48px] text-white leading-none mb-6 text-center lg:text-left lg:ml-20">
               NAŠ TIM
             </h2>            
-            <p className="font-atkinson text-[24px] text-white text-center leading-relaxed px-15 lg:px-0 lg:text-left lg:ml-20 lg:max-w-4xl">
+            <p className="font-atkinson text-[24px] text-white text-center leading-relaxed px-8 sm:px-15 lg:px-0 lg:text-left lg:ml-20 lg:max-w-4xl">
               Naš tim čine profesionalno i ljubazno osoblje sa dugogodišnjim iskustvom u obavljanju tehničkog pregleda, registracije i osiguranja svih vrsta motornih vozila.
             </p>
           </div>
@@ -946,7 +1031,7 @@ function App() {
           {/* Team Grid - Responsive Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
               {/* Director */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:ml-30 lg:ml-0 mb-6">
                 <img 
                   src={oliver_direktor} 
                   alt="Oliver Rađenović - Direktor" 
@@ -963,7 +1048,7 @@ function App() {
                 </div>
               </div>
               {/* Manager */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:mr-30 lg:mr-0 mb-6">
                 <img 
                   src={veljko_menadzer} 
                   alt="Veljko Rađenović - Menadžer" 
@@ -980,7 +1065,7 @@ function App() {
                 </div>
               </div>
               {/* Sales Agent */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:ml-30 lg:ml-0 mb-6">
                 <img 
                   src={natasa_agent} 
                   alt="Nataša Mladenović - Agent prodaje u osiguranju" 
@@ -1002,7 +1087,7 @@ function App() {
               </div>
 
               {/* Lawyer */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:mr-30 lg:mr-0 mb-6">
                   <img 
                     src={bozica_pravnik} 
                     alt="Božica Radovanović - Diplomirani pravnik" 
@@ -1024,7 +1109,7 @@ function App() {
               </div>
 
               {/* Technical Inspector 1 */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:ml-30 lg:ml-0 mb-6">
                 <img 
                   src={sanja_kontrolor} 
                   alt="Sanja Šekler - Kontrolor tehničkog pregleda" 
@@ -1042,7 +1127,7 @@ function App() {
               </div>
 
               {/* Technical Inspector 2 */}
-              <div className="flex flex-col mb-6">
+              <div className="flex flex-col md:mr-30 lg:mr-0 mb-6">
                 <img 
                   src={mirko_kontrolor} 
                   alt="Mirko Vukadinović - Kontrolor tehničkog pregleda" 
@@ -1059,7 +1144,7 @@ function App() {
                 </div>
               </div>
                 {/* Technical Inspector 3 */}
-                <div className="flex flex-col mb-6 lg:pl-[100%] xl:pl-0">
+                <div className="flex flex-col md:ml-30 lg:ml-0 mb-6 lg:pl-[100%] xl:pl-0">
                   <img 
                     src={srdjan_kontrolor} 
                     alt="Srđan Nikolić - Kontrolor tehničkog pregleda" 
@@ -1077,7 +1162,7 @@ function App() {
                 </div>
 
                 {/* Technical Inspector 4 */}
-                <div className="flex flex-col mb-6 lg:pl-[100%] xl:pl-0">
+                <div className="flex flex-col md:mr-30 lg:mr-0 mb-6 lg:pl-[100%] xl:pl-0">
                   <img 
                     src={dejan_kontrolor} 
                     alt="Dejan Obradović - Kontrolor tehničkog pregleda" 
@@ -1122,20 +1207,20 @@ function App() {
           {/* Main Footer Content */}
           <div className="flex flex-col xl:flex-row justify-between items-center gap-10 xl:items-start mb-16 xl:pl-10">
             {/* Contact Header - Centered below LG */}
-            <div className="lg:hidden">
+            <div className="xl:hidden">
               <h2 className="font-raleway font-bold text-[48px] text-[#E9E9E9] text-center leading-none mb-12">
                 KONTAKT
               </h2>
             </div>
 
             {/* Left Column - Contact Information */}
-            <div className="flex-1 lg:min-w-[400px] flex flex-col items-center lg:items-start">
+            <div className="flex-1 xl:min-w-[400px] flex flex-col items-center xl:items-start">
               {/* Contact Header - Hidden below LG, shown above LG */}
-              <h2 className="hidden lg:block font-raleway font-bold text-[48px] text-[#E9E9E9] text-center leading-none mb-12">
+              <h2 className="hidden xl:block font-raleway font-bold text-[48px] text-[#E9E9E9] text-center leading-none mb-12">
                 KONTAKT
               </h2>
               
-              <div className="space-y-6 max-w-4xl">
+              <div className="space-y-6 sm:max-w-4xl">
                 {/* Location */}
                 <div className="flex items-start gap-4">
                   <svg className="w-6 h-6 text-[#DC1B21] mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -1145,9 +1230,9 @@ function App() {
                     href="https://maps.app.goo.gl/snLwr7t9HNeffiVY7" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="font-inter font-normal text-[24px] leading-[24px] text-gray-400 hover:text-white transition-colors whitespace-nowrap"
+                    className="font-inter font-normal text-[24px] leading-[24px] text-gray-400 hover:text-white transition-colors"
                   >
-                    Vojvode Mišića 2, Ratina - Kraljevo
+                    Vojvode Mišića 2, Ratina <br /> Kraljevo
                   </a>
                 </div>
 
@@ -1199,17 +1284,28 @@ function App() {
             </div>
 
             {/* Center Column - Working Hours */}
-            <div className="flex-1 min-w-0 lg:min-w-[300px] flex flex-col items-start mr-30 lg:mr-0">
-              <h3 className="font-inter font-medium text-[24px] text-white text-left leading-none mt-24 mb-8">
+            <div className="flex-1 min-w-0 lg:min-w-[300px] flex flex-col items-start mr-23 sm:mr-15 xl:mr-0">
+              <h3 className="font-inter font-medium text-[24px] text-white text-left leading-none xl:mt-24 mb-8">
                 Radno vreme
               </h3>
               
-              <div className="space-y-6">
+              <div className="space-y-6 hidden sm:block">
                 <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
                   Radnim danima: 07.00 - 17.00 h
                 </p>
                 <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
                   Subotom: 07.00 - 14.00 h
+                </p>
+                <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
+                  Nedelja: neradna
+                </p>
+              </div>
+              <div className="space-y-6 block sm:hidden">
+                <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
+                  Radnim danima:<br /> 07.00 - 17.00 h
+                </p>
+                <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
+                  Subotom:<br /> 07.00 - 14.00 h
                 </p>
                 <p className="font-inter font-medium text-[20px] leading-[24px] text-gray-400">
                   Nedelja: neradna
@@ -1241,6 +1337,9 @@ function App() {
         <button
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 w-16 h-16 bg-[#DA0D14] text-white rounded-full shadow-lg hover:bg-[#87171B] transition-all duration-300 z-50 flex items-center justify-center group"
+          style={{
+            boxShadow: '0 0 30px rgba(218, 13, 20, 0.4), 0 10px 25px rgba(0, 0, 0, 0.3)'
+          }}
           aria-label="Scroll to top"
         >
           <svg 
