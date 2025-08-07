@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "./assets/finalni oliver logo i kartice-05 1.svg";
 import heroVideo from "./assets/oliver_snimak.mp4";
+import heroVideoMobile from "./assets/oliver_snimak_telefon.mp4";
 import React from "react"; // Added missing import for React.useEffect
 import carLogo from "./assets/crvena-kola-logo.svg";
 import wheelLogo from "./assets/crven-volan-logo.svg";
@@ -60,10 +61,7 @@ const HERO_OPTIONS = [
   },
 ];
 
-const HERO_CONTENT = {
-  title: "Pozovite nas na 036-586-2222 i zakažite svoj termin unapred!",
-  desc: "Pružamo kompletan tehnički pregled za sve vrste motornih vozila. Od motocikala i putničkih vozila, preko lakih i teških teretnjaka, autobusa, prikulica i poluprikulica, pa sve do traktora i radnih mašina. Bez obzira na vrstu vozila, kod nas ste u sigurnim rukama."
-};
+
 
 function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -397,7 +395,7 @@ function App() {
           <div className="relative w-full h-[400px] bg-black overflow-hidden">
             <video
               className="absolute top-0 left-0 w-full h-full object-cover z-0"
-              src={heroVideo}
+              src={window.innerWidth < 1024 ? heroVideoMobile : heroVideo}
               autoPlay
               loop
               muted
@@ -409,29 +407,47 @@ function App() {
             <div className="absolute inset-0 z-20 flex items-end justify-center">
               <div className="text-center px-10 md:px-20 mb-10">
                 <h1 className="font-inter font-semibold text-[24px] sm:text-[28px] text-white leading-tight drop-shadow-lg">
-                  {HERO_CONTENT.title}
+                  Pozovite nas na <br className="sm:hidden" />036-586-2222 i zakažite svoj termin unapred!
                 </h1>
               </div>
             </div>
           </div>
           
-          {/* Content Section with Gray Background */}
-          <div className="w-full bg-[#222222] pb-16 pt-10 px-8">
+          {/* Content Section with Background Image (below lg) / Gray Background (lg and above) */}
+          <div 
+            className="w-full pb-16 pt-10 px-8 lg:bg-[#222222] bg-fixed relative"
+            style={{
+              backgroundImage: window.innerWidth < 1024 ? `url(${teamBg})` : 'none',
+              backgroundSize: window.innerWidth < 1024 ? 'cover' : 'auto',
+              backgroundPosition: window.innerWidth < 1024 ? 'center' : 'auto',
+              backgroundRepeat: window.innerWidth < 1024 ? 'no-repeat' : 'auto',
+              backgroundColor: window.innerWidth < 1024 ? '#1D1D1D' : '#222222',
+            }}
+          >
+            {/* Top shadow overlay for background image (below lg) */}
+            {window.innerWidth < 1024 && (
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0) 100%)'
+                }}
+              />
+            )}
             <div className="max-w-4xl mx-auto">            
               {/* Description Text */}
-              <div className="text-left mb-12">
+              <div className="text-left mb-12 relative z-10">
                 <p className="font-inter text-[16px] px-10 sm:text-[18px] text-white leading-relaxed mx-auto md:px-20">
-                  {HERO_CONTENT.desc}
+                  Pružamo kompletan tehnički pregled za sve vrste motornih vozila. Od motocikala i putničkih vozila, preko lakih i teških teretnjaka, autobusa, prikulica i poluprikulica, pa sve do traktora i radnih mašina. Bez obzira na vrstu vozila, kod nas ste u sigurnim rukama.
                 </p>
               </div>
               
               {/* Buttons - Vertically Stacked */}
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col items-center gap-4 relative z-10">
                 {HERO_OPTIONS.map((option) => {
                   const getScrollTarget = (key) => {
                     switch (key) {
                       case 'tehnicki': return 'tehnicki-pregled';
-                      case 'osiguranje': return 'registracija-osiguranje';
+                      case 'osiguranje': return window.innerWidth < 1024 ? 'osiguranje' : 'registracija-osiguranje';
                       case 'registracija': return 'registracija-osiguranje';
                       default: return 'usluge';
                     }
@@ -472,10 +488,10 @@ function App() {
             {/* Static text content */}
             <div className="w-full text-left pl-16 pr-55">
               <h1 className="font-inter font-semibold text-[32px] text-white mb-4">
-                {HERO_CONTENT.title}
+                Pozovite nas na 036-586-2222 i zakažite svoj termin unapred!
               </h1>
               <p className="font-inter text-[20px] text-white mb-10">
-                {HERO_CONTENT.desc}
+                Pružamo kompletan tehnički pregled za sve vrste motornih vozila. Od motocikala i putničkih vozila, preko lakih i teških teretnjaka, autobusa, prikulica i poluprikulica, pa sve do traktora i radnih mašina. Bez obzira na vrstu vozila, kod nas ste u sigurnim rukama.
               </p>
             </div>
             <div className="flex flex-row gap-8 mt-4 justify-center items-center">
@@ -483,7 +499,7 @@ function App() {
                 const getScrollTarget = (key) => {
                   switch (key) {
                     case 'tehnicki': return 'tehnicki-pregled';
-                    case 'osiguranje': return 'registracija-osiguranje';
+                    case 'osiguranje': return window.innerWidth < 1024 ? 'osiguranje' : 'registracija-osiguranje';
                     case 'registracija': return 'registracija-osiguranje';
                     default: return 'usluge';
                   }
@@ -585,7 +601,7 @@ function App() {
                 </p>
               </div>
               {/* Column 3 */}
-              <div className="flex flex-col items-center text-center w-1/3">
+              <div className="flex flex-col items-center text-center w-1/3">``
                 <img src={keysLogo} alt="Osiguranje" className="h-20" />
                 <h3 className="font-inter font-bold text-2xl text-[#1D1D1D] mb-4 h-16">
                   Zaključivanje polisa<br />osiguranja vozila i lica
@@ -599,6 +615,11 @@ function App() {
         </div>
       </section>
 
+    <div className="relative w-full bg-contain bg-no-repeat" style={{
+      backgroundImage: `url(${fonPogledBg})`,
+      backgroundPosition: '0px 0px',
+      backgroundSize: '100% 64%',
+    }}>
       <div 
         className="relative w-full bg-no-repeat"
         style={{
@@ -633,10 +654,6 @@ function App() {
               window.innerWidth >= 375 ? '0px 800px' :
               window.innerWidth >= 350 ? '0px 930px' :
               '0px 1000px',
-              // window.innerWidth >= 768 ? '0px 30px' : 
-              // window.innerWidth >= 700 ? '0px 70px' :
-              // '0px 75px',
-          backgroundColor: '#ffffff',
         }}
       >
           {/* </div> */}
@@ -661,7 +678,7 @@ function App() {
               </ul>
             </div>
                       {/* Box 2: Osiguranje vozila */}
-              <div className="bg-[#5C5C5C] shadow-lg flex flex-col items-center w-full max-w-lg p-8 min-h-[454px]">
+              <div id="osiguranje" className="bg-[#5C5C5C] shadow-lg flex flex-col items-center w-full max-w-lg p-8 min-h-[454px]">
                 <h3 className="text-white text-[24px] sm:text-[28px] lg:text-[36px] font-raleway font-bold text-center mb-6">
               OSIGURANJE VOZILA
             </h3>
@@ -888,6 +905,7 @@ function App() {
            `}</style>
         </section>
       </div>
+    </div>
 
 
       {/* Mission, Vision, Goals Section */}
@@ -1378,6 +1396,18 @@ function Carousel() {
   const [current, setCurrent] = React.useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = React.useState(true);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  // Check screen size
+  React.useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // Auto-play functionality
   React.useEffect(() => {
@@ -1432,6 +1462,35 @@ function Carousel() {
               position += allImages.length;
             }
             
+            // Mobile view: only show current image
+            if (isMobile) {
+              if (position !== 0) return null;
+              
+              return (
+                <div
+                  key={index}
+                  className="absolute w-[80%] sm:w-[75%] md:w-[70%] h-full left-0 right-0 mx-auto transition-all duration-400 ease-in-out"
+                  style={{
+                    transform: 'translateX(0)',
+                    opacity: 1,
+                    zIndex: 3,
+                  }}
+                >
+                  <img
+                    src={img}
+                    alt={`carousel-${index}`}
+                    className="w-full h-full object-cover shadow-lg"
+                    style={{
+                      borderRadius: '0',
+                      boxShadow: '0px 0px 5px 0px rgba(81, 81, 81, 0.47)'
+                    }}
+                    draggable={false}
+                  />
+                </div>
+              );
+            }
+            
+            // Desktop view: show multiple images (original behavior)
             // Only render visible images (center + 2 on each side)
             if (Math.abs(position) > 2) return null;
             
