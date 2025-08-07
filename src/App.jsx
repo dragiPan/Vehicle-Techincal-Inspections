@@ -74,9 +74,16 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => setWindowWidth(window.innerWidth), 100);
+    };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   // Check screen size and handle scroll
@@ -97,13 +104,17 @@ function App() {
         setIsMobileMenuOpen(false);
       }
 
+      // Batch DOM reads to avoid forced reflows
+      let headerHeight = 0;
+      let newActiveSection = activeSection;
+      
       // Handle sticky navbar (only for desktop)
       if (!isMobile) {
-        const headerHeight = document.querySelector('.header-section')?.offsetHeight || 0;
+        headerHeight = document.querySelector('.header-section')?.offsetHeight || 0;
         setIsNavSticky(window.scrollY > headerHeight);
       }
 
-      // Determine active section
+      // Determine active section - batch all DOM reads first
       const sections = [
         { id: 'pocetna', element: document.getElementById('pocetna') },
         { id: 'usluge', element: document.getElementById('usluge') },
@@ -115,28 +126,41 @@ function App() {
 
       const scrollPosition = window.scrollY + 100; // Offset for better detection
 
-      // Normal section detection
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
+      // Batch all DOM reads first, then process
+      const sectionData = sections.map(section => {
         if (section.element) {
-          const sectionTop = section.element.offsetTop;
-          const sectionHeight = section.element.offsetHeight;
-          const sectionBottom = sectionTop + sectionHeight;
-          
-          // For map and kontakt sections, highlight 'kontakt' nav button
-          if (section.id === 'mapa' || section.id === 'kontakt') {
-            if (scrollPosition >= sectionTop) {
-              setActiveSection('kontakt'); // Always set to 'kontakt' for navigation highlighting
-              break;
-            }
-          } else {
-            // For other sections, use normal detection
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-              setActiveSection(section.id);
-              break;
-            }
+          return {
+            id: section.id,
+            top: section.element.offsetTop,
+            height: section.element.offsetHeight,
+            bottom: section.element.offsetTop + section.element.offsetHeight
+          };
+        }
+        return null;
+      }).filter(Boolean);
+
+      // Process section data without additional DOM reads
+      for (let i = sectionData.length - 1; i >= 0; i--) {
+        const section = sectionData[i];
+        
+        // For map and kontakt sections, highlight 'kontakt' nav button
+        if (section.id === 'mapa' || section.id === 'kontakt') {
+          if (scrollPosition >= section.top) {
+            newActiveSection = 'kontakt';
+            break;
+          }
+        } else {
+          // For other sections, use normal detection
+          if (scrollPosition >= section.top && scrollPosition < section.bottom) {
+            newActiveSection = section.id;
+            break;
           }
         }
+      }
+
+      // Update state only if changed
+      if (newActiveSection !== activeSection) {
+        setActiveSection(newActiveSection);
       }
     };
 
@@ -187,7 +211,7 @@ function App() {
       const elementPosition = rect.top + scrollTop;
       
       // Account for navbar height
-      const offset = 70; // Fixed navbar height offset
+      const offset = 170;
       const targetPosition = elementPosition - offset;
       
       window.scrollTo({
@@ -601,7 +625,7 @@ function App() {
                 </p>
               </div>
               {/* Column 3 */}
-              <div className="flex flex-col items-center text-center w-1/3">``
+              <div className="flex flex-col items-center text-center w-1/3">
                 <img src={keysLogo} alt="Osiguranje" className="h-20" />
                 <h3 className="font-inter font-bold text-2xl text-[#1D1D1D] mb-4 h-16">
                   Zaključivanje polisa<br />osiguranja vozila i lica
