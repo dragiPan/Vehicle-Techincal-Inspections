@@ -617,7 +617,7 @@ function App() {
 
     <div className="relative w-full bg-contain bg-no-repeat" style={{
       backgroundImage: `url(${fonPogledBg})`,
-      backgroundPosition: '0px 0px',
+      backgroundPosition: '0px -155px',
       backgroundSize: '100% 64%',
     }}>
       <div 
