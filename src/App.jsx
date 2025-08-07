@@ -1020,7 +1020,7 @@ function App() {
             Tehnički pregled OLIVER d.o.o. je privatno porodično preduzeće koje je počelo sa radom 2025. godine nakon dugogodišnjeg iskustva vlasnika i celog tima u poslovima tehničkog pregleda vozila.
           </p>
           {/* Responsive Carousel */}
-          <div className="w-full max-w-5xl mx-auto px-18 lg:px-4">
+          <div className="w-full max-w-5xl mx-auto md:px-20 lg:px-20 xl:px-0">
             <Carousel />
           </div>
         </div>
