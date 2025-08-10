@@ -1,50 +1,88 @@
-import { useState, useEffect } from "react";
-import logo from "./assets/finalni oliver logo i kartice-05 1.svg";
-import heroVideo from "./assets/oliver_snimak.mp4";
-import heroVideoMobile from "./assets/oliver_snimak_telefon.mp4";
-import React from "react"; // Added missing import for React.useEffect
-import carLogo from "./assets/crvena-kola-logo.svg";
-import wheelLogo from "./assets/crven-volan-logo.svg";
-import keysLogo from "./assets/crveni-kljucevi.svg";
-import carImg from "./assets/car.png";
-import checkboxImg from "./assets/checkbox.svg";
-import kamioniBg from "./assets/Kamioni.png";
-import fullContentBg from "./assets/Full content pozadina.jpg";
-import fonPogledBg from "./assets/fon pogled pozadina.png";
-import teamBg from "./assets/pozadina tima.jpg";
-import slajd1 from './assets/slajd1.JPG';
-import slajd3 from './assets/slajd3.jpg';
-import slajd4 from './assets/slajd 4.jpg';
-import slajd5 from './assets/slajd 5.JPG';
-import arrowLeft from './assets/Arrow Left.svg';
-import arrowRight from './assets/Arrow Right.svg';
-import menuIcon from './assets/Menu.svg';
-// Additional carousel images (excluding team member images)
-import carousel3 from './assets/DSC_6149.JPG';
-import carousel5 from './assets/DSC_6306.JPG';
-import carousel6 from './assets/DSC_6145.JPG';
-import carousel7 from './assets/DSC_6302.JPG';
-import carousel9 from './assets/DSC_6312.JPG';
-import carousel10 from './assets/DSC_6322.JPG';
-import carousel12 from './assets/DSC_6091.JPG';
-import carousel13 from './assets/DSC_6160.JPG';
-import carousel15 from './assets/DSC_6169.JPG';
-import carousel16 from './assets/DSC_6197.JPG';
-import carousel18 from './assets/DSC_6200.JPG';
-import carousel20 from './assets/DSC_6453.JPG';
-import carousel21 from './assets/DSC_6725.JPG';
-import carousel22 from './assets/DSC_6348.JPG';
-// Team member images (swapped Natasa and Božica)
-import oliver_direktor from './assets/DSC_6755 (1).JPG';
-import veljko_menadzer from './assets/DSC_6773 (1).JPG';
-import natasa_agent from './assets/DSC_6274.JPG'; // Swapped with Božica
-import bozica_pravnik from './assets/DSC_6267.JPG'; // Swapped with Natasa
-import sanja_kontrolor from './assets/DSC_6334.JPG';
-import mirko_kontrolor from './assets/DSC_6244.JPG';
-import srdjan_kontrolor from './assets/DSC_6288.JPG';
-import dejan_kontrolor from './assets/DSC_6232.JPG';
-// White logo for footer
-import logoWhite from './assets/oliver logo footer.png';
+// Import all assets from organized imports file
+import {
+  // React imports
+  useState,
+  useEffect,
+} from "react";
+import React from "react";
+
+// Import all assets from organized imports file
+import {
+  // Logo and branding
+  logo,
+  logoWhite,
+  
+  // Videos
+  heroVideo,
+  heroVideoMobile,
+  
+  // Service icons
+  carLogo,
+  wheelLogo,
+  keysLogo,
+  
+  // UI elements
+  carImg,
+  checkboxImg,
+  arrowLeft,
+  arrowRight,
+  menuIcon,
+  
+  // Background images
+  kamioniBg,
+  fullContentBg,
+  fonPogledBg,
+  teamBg,
+  
+  // Carousel images - new webp versions for mobile/tablet (below lg breakpoint)
+  carousel1,
+  carousel2,
+  carousel3,
+  carousel4,
+  carousel5,
+  carousel6,
+  carousel7,
+  carousel8,
+  carousel9,
+  carousel10,
+  carousel11,
+  carousel12,
+  carousel13,
+  carousel14,
+  carousel15,
+  
+  // Carousel images - DSC versions for desktop (lg breakpoint and above)
+  carousel3DSC,
+  carousel5DSC,
+  carousel6DSC,
+  carousel7DSC,
+  carousel9DSC,
+  carousel10DSC,
+  carousel12DSC,
+  carousel13DSC,
+  carousel15DSC,
+  carousel16DSC,
+  carousel18DSC,
+  carousel20DSC,
+  carousel21DSC,
+  carousel22DSC,
+  
+  // Legacy carousel images (slajd images)
+  slajd1,
+  slajd3,
+  slajd4,
+  slajd5,
+  
+  // Team member images - new webp versions with first names
+  oliver_direktor,
+  veljko_menadzer,
+  natasa_agent,
+  bozica_pravnik,
+  sanja_kontrolor,
+  mirko_kontrolor,
+  srdjan_kontrolor,
+  dejan_kontrolor,
+} from "./imports";
 
 const HERO_OPTIONS = [
   {
@@ -1385,12 +1423,29 @@ export default App;
 
 // Carousel component
 function Carousel() {
-  // All available images for carousel (excluding logos, icons, backgrounds, and team photos)
-  const allImages = [
-    // Carousel images - manually randomized order (removed missing images)
-    carousel15, carousel3, carousel12, carousel6, carousel21, carousel10,
-    carousel22, carousel13, carousel7, carousel20, carousel16, carousel9,
-    carousel18, carousel5, slajd3, slajd1, slajd5, slajd4
+  // Get screen size to determine which images to use
+  const [isLargeScreen, setIsLargeScreen] = React.useState(window.innerWidth >= 1024);
+  
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // All available images for carousel - responsive based on screen size
+  const allImages = isLargeScreen ? [
+    // Desktop (lg and above) - use DSC images
+    carousel15DSC, carousel3DSC, carousel12DSC, carousel6DSC, carousel21DSC, carousel10DSC,
+    carousel22DSC, carousel13DSC, carousel7DSC, carousel20DSC, carousel16DSC, carousel9DSC,
+    carousel18DSC, carousel5DSC, slajd3, slajd1, slajd5, slajd4
+  ] : [
+    // Mobile/Tablet (below lg) - use new webp carousel images
+    carousel15, carousel3, carousel12, carousel6, carousel4, carousel10,
+    carousel14, carousel13, carousel7, carousel8, carousel11, carousel9,
+    carousel2, carousel5, slajd3, slajd1, slajd5, slajd4
   ];
   
   const [current, setCurrent] = React.useState(0);
